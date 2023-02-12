@@ -1,0 +1,9 @@
+{
+  "short_name": "P2P messaging",
+  "name": "P2P messaging web app",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
