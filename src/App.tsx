@@ -1,7 +1,3 @@
 export function App() {
-  return (
-    <div>
-		TODO
-    </div>
-  );
+    return <div>TODO</div>
 }

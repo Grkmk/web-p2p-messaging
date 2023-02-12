@@ -1,46 +1,97 @@
 {
-  "name": "web-p2p-messaging",
-  "version": "0.1.0",
-  "private": true,
-  "engines": {
-	"node": "16.19.x"
-  },
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.12",
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.10",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "name": "web-p2p-messaging",
+    "version": "0.1.0",
+    "private": true,
+    "engines": {
+        "node": "16.19.x"
+    },
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "eslint": "eslint --ext .js,.jsx,.ts,.tsx src --color --fix",
+        "eslint:check": "eslint --ext .js,.jsx,.ts,.tsx src --color",
+        "prettier": "prettier --config .prettierrc --check src"
+    },
+    "dependencies": {
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^13.4.0",
+        "@testing-library/user-event": "^13.5.0",
+        "@types/jest": "^27.5.2",
+        "@types/node": "^16.18.12",
+        "@types/react": "^18.0.28",
+        "@types/react-dom": "^18.0.10",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-scripts": "5.0.1",
+        "typescript": "^4.9.5"
+    },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^5.51.0",
+        "eslint": "^8.34.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "husky": "^8.0.3",
+        "prettier": "^2.8.4",
+        "sass": "^1.58.0"
+    },
+    "eslintConfig": {
+        "plugins": [
+            "@typescript-eslint/eslint-plugin"
+        ],
+        "extends": [
+            "react-app",
+            "react-app/jest",
+            "plugin:@typescript-eslint/recommended"
+        ],
+        "rules": {
+            "@typescript-eslint/interface-name-prefix": "off",
+            "@typescript-eslint/explicit-function-return-type": "off",
+            "@typescript-eslint/explicit-module-boundary-types": "off",
+            "@typescript-eslint/no-explicit-any": "error",
+            "@typescript-eslint/explicit-member-accessibility": "error",
+            "semi": [
+                1,
+                "never"
+            ],
+            "require-await": "error",
+            "no-return-await": "warn",
+            "no-else-return": "error",
+            "no-console": "warn",
+            "react/jsx-boolean-value": [
+                2,
+                "always"
+            ],
+            "react/self-closing-comp": [
+                2,
+                {
+                    "component": true
+                }
+            ]
+        }
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": [
+            "eslint --color --fix --quiet",
+            "prettier --write",
+            "git add"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
 }
