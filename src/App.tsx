@@ -1,5 +1,9 @@
-import styles from 'App.module.scss'
+import WelcomingModal from './landing-page/modal'
 
 export function App() {
-    return <div className={styles.TODO}>TODO</div>
+    return (
+        <div className="App">
+            <WelcomingModal />
+        </div>
+    )
 }
