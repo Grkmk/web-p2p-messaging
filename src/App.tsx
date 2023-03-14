@@ -5,12 +5,13 @@ interface Peer {
     conn: RTCPeerConnection
     chan?: RTCDataChannel
     enabled?: true
+    // TODO: store messages
 }
 
 export function App() {
     const [offer, setOffer] = useState<RTCSessionDescriptionInit | null>()
     const [reveivedOffer, setReceivedOffer] = useState<RTCSessionDescriptionInit | null>()
-    const peers: Peer[] = []
+    const [peers, setPeers] = useState<Peer[]>([])
 
     return (
         <div className={styles.container}>
@@ -20,6 +21,10 @@ export function App() {
                 <form onSubmit={e => handleReceiveOffer(e)}>
                     <textarea name="offer" />
                     <button type="submit">Receive Offer</button>
+                </form>
+                <form onSubmit={e => handleAnswer(e)}>
+                    <textarea name="answer" />
+                    <button type="submit">Receive answer</button>
                 </form>
                 {reveivedOffer && <pre>{JSON.stringify(reveivedOffer, null, 2)}</pre>}
             </div>
@@ -56,9 +61,8 @@ export function App() {
 
     async function handleGenerateOffer(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault()
-
         // Create the local connection and its event listeners
-        const conn = new RTCPeerConnection()
+        const conn = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun1.l.google.com:19302' }] })
         const peer: Peer = { conn }
 
         // Create the data channel and establish its event listeners
@@ -74,8 +78,9 @@ export function App() {
         const desc = await conn.createOffer()
         await conn.setLocalDescription(desc)
 
-        setOffer(desc)
-        peers.push(peer)
+        // TODO: pass local identifier to remote peer
+        setOffer(conn.localDescription)
+        setPeers([...peers, peer])
     }
 
     async function handleReceiveOffer(e: React.FormEvent<HTMLFormElement>) {
@@ -96,7 +101,19 @@ export function App() {
         const answer = await conn.createAnswer()
         await conn.setLocalDescription(answer)
 
+        // TODO: pass received identifier to remote peer
         setReceivedOffer(answer)
+        setPeers([...peers, peer])
+    }
+
+    async function handleAnswer(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+
+        // TODO: find peer by identifier
+        const conn = peers[0].conn
+        const answer = JSON.parse(e.currentTarget.answer.value)
+
+        await conn.setRemoteDescription(answer)
     }
 
     function handleChannelStatusChange(peer: Peer, index: number) {
