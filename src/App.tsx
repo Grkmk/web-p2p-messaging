@@ -5,7 +5,8 @@ interface Peer {
     conn: RTCPeerConnection
     chan?: RTCDataChannel
     enabled?: true
-    // TODO: store messages
+    // TODO: add sent messages
+    receivedMessages?: string[]
 }
 
 const ICE_SERVERS: RTCIceServer[] = [{ urls: 'stun:stun1.l.google.com:19302' }]
@@ -35,7 +36,7 @@ export function App() {
                 .filter(p => p.enabled)
                 .map((p, i) => (
                     <div key={i}>
-                        <div>
+                        <form onSubmit={handleSendMessage(p)}>
                             <label>
                                 Enter a message:
                                 <input
@@ -46,15 +47,15 @@ export function App() {
                                     inputMode="text"
                                     size={60}
                                     maxLength={120}
-                                    disabled
                                 />
                             </label>
-                            <button id="sendButton" name="sendButton" disabled>
-                                Send
-                            </button>
-                        </div>
-                        <div id={`messageBox-${i}`}>
-                            <p>Messages received:</p>
+                            <button type="submit">Send</button>
+                        </form>
+                        <div>
+                            {/* TODO: render sent messages */}
+                            {p.receivedMessages?.map((m, i) => (
+                                <p key={i}>Messages received:</p>
+                            ))}
                         </div>
                     </div>
                 ))}
@@ -118,17 +119,25 @@ export function App() {
         await conn.setRemoteDescription(answer)
     }
 
+    function handleSendMessage(peer: Peer) {
+        return (e: React.FormEvent<HTMLFormElement>) => {
+            e.preventDefault()
+
+            const message = e.currentTarget.message.value
+
+            if (peer.chan?.readyState === 'open') {
+                peer.chan.send(message)
+            }
+        }
+    }
+
     function handleChannelStatusChange(peer: Peer, index: number) {
         return (event: Event) => {
             console.log('Received channel status change: ' + JSON.stringify(event))
 
-            if (peer.chan?.readyState === 'open') {
-                peer.enabled = true
-                return
-            }
-
             if (event.isTrusted) {
                 peer.enabled = true
+                setPeers([...peers])
                 return
             }
 
@@ -182,16 +191,10 @@ export function App() {
         return (event: MessageEvent) => {
             console.log('Received message: ' + JSON.stringify(event))
 
-            const receiveBox = document.getElementById(`messageBox-${index}`)
-            if (!receiveBox) {
-                return console.error('No receive box found')
+            if (event.isTrusted) {
+                peer.receivedMessages = [...(peer.receivedMessages || []), event.data]
+                setPeers([...peers])
             }
-
-            const el = document.createElement('p')
-            const txtNode = document.createTextNode(event.data)
-
-            el.appendChild(txtNode)
-            receiveBox.appendChild(el)
         }
     }
 }
