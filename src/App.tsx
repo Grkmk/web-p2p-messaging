@@ -8,9 +8,11 @@ interface Peer {
     // TODO: store messages
 }
 
+const ICE_SERVERS: RTCIceServer[] = [{ urls: 'stun:stun1.l.google.com:19302' }]
+
 export function App() {
-    const [offer, setOffer] = useState<RTCSessionDescriptionInit | null>()
-    const [reveivedOffer, setReceivedOffer] = useState<RTCSessionDescriptionInit | null>()
+    const [offer, setOffer] = useState<RTCSessionDescription | null>()
+    const [reveivedOffer, setReceivedOffer] = useState<RTCSessionDescription | null>()
     const [peers, setPeers] = useState<Peer[]>([])
 
     return (
@@ -62,7 +64,8 @@ export function App() {
     async function handleGenerateOffer(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault()
         // Create the local connection and its event listeners
-        const conn = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun1.l.google.com:19302' }] })
+        const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
+
         const peer: Peer = { conn }
 
         // Create the data channel and establish its event listeners
@@ -72,14 +75,12 @@ export function App() {
         peer.chan.onmessage = handleReceiveMessage(peer, peers.length)
 
         // Set up the ICE candidate for the connection
-        conn.onicecandidate = handleAddIceCandidate(peer)
+        conn.onicecandidate = handleIceCandidateForOffer(peer)
 
         // Now create an offer to connect; this starts the process
         const desc = await conn.createOffer()
         await conn.setLocalDescription(desc)
 
-        // TODO: pass local identifier to remote peer
-        setOffer(conn.localDescription)
         setPeers([...peers, peer])
     }
 
@@ -94,15 +95,13 @@ export function App() {
         conn.ondatachannel = receiveDataChannel(peer, peers.length)
 
         // Set up the ICE candidates for the two peers
-        conn.onicecandidate = handleAddIceCandidate(peer)
+        conn.onicecandidate = handleIceCandidateForAnswer(peer)
 
         // Now create an offer to connect; this starts the process
         await conn.setRemoteDescription(remoteDesc)
         const answer = await conn.createAnswer()
         await conn.setLocalDescription(answer)
 
-        // TODO: pass received identifier to remote peer
-        setReceivedOffer(answer)
         setPeers([...peers, peer])
     }
 
@@ -141,12 +140,32 @@ export function App() {
         }
     }
 
-    function handleAddIceCandidate(peer: Peer) {
+    function handleIceCandidateForOffer(peer: Peer) {
         return (event: RTCPeerConnectionIceEvent) => {
-            console.log('Received ICE: ' + JSON.stringify(event))
+            console.log('Received ICE for offer: ' + JSON.stringify(event))
 
             if (event.candidate) {
                 peer.conn.addIceCandidate(event.candidate)
+            }
+
+            if (event.isTrusted) {
+                // TODO: pass local identifier to remote peer
+                setOffer(peer.conn.localDescription)
+            }
+        }
+    }
+
+    function handleIceCandidateForAnswer(peer: Peer) {
+        return (event: RTCPeerConnectionIceEvent) => {
+            console.log('Received ICE for answer: ' + JSON.stringify(event))
+
+            if (event.candidate) {
+                peer.conn.addIceCandidate(event.candidate)
+            }
+
+            if (event.isTrusted) {
+                // TODO: pass received identifier to remote peer
+                setReceivedOffer(peer.conn.localDescription)
             }
         }
     }
