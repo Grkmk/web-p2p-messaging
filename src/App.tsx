@@ -73,6 +73,7 @@ export function App() {
         peer.chan.onopen = handleChannelStatusChange(peer, peers.length)
         peer.chan.onclose = handleChannelStatusChange(peer, peers.length)
         peer.chan.onmessage = handleReceiveMessage(peer, peers.length)
+        peer.conn.onnegotiationneeded = e => console.log('negotiation needed', e)
 
         // Set up the ICE candidate for the connection
         conn.onicecandidate = handleIceCandidateForOffer(peer)
@@ -90,9 +91,11 @@ export function App() {
         const remoteDesc = JSON.parse(e.currentTarget.offer.value)
 
         // Create the remote connection and its event listeners
-        const conn = new RTCPeerConnection()
+        const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
         const peer: Peer = { conn }
+        peer.chan = conn.createDataChannel('chan' + peers.length)
         conn.ondatachannel = receiveDataChannel(peer, peers.length)
+        peer.conn.onnegotiationneeded = e => console.log('negotiation needed', e)
 
         // Set up the ICE candidates for the two peers
         conn.onicecandidate = handleIceCandidateForAnswer(peer)
@@ -120,6 +123,11 @@ export function App() {
             console.log('Received channel status change: ' + JSON.stringify(event))
 
             if (peer.chan?.readyState === 'open') {
+                peer.enabled = true
+                return
+            }
+
+            if (event.isTrusted) {
                 peer.enabled = true
                 return
             }
