@@ -53,9 +53,10 @@ export function App() {
                             <button type="submit">Send</button>
                         </form>
                         <div>
+                            <p>Messages</p>
                             {/* TODO: render sent messages */}
                             {p.receivedMessages?.map((m, i) => (
-                                <p key={i}>Messages received:</p>
+                                <p key={i}>{m}</p>
                             ))}
                         </div>
                     </div>
@@ -125,7 +126,6 @@ export function App() {
             e.preventDefault()
 
             const message = e.currentTarget.message.value
-
             if (peer.chan?.readyState === 'open') {
                 peer.chan.send(message)
             }
