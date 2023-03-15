@@ -147,6 +147,9 @@ export function App() {
 
             if (peer.chan?.readyState === 'open') {
                 peer.chan.send(JSON.stringify(message))
+                peer.messages = [...(peer.messages || []), message]
+                sortMessages(peer)
+                forceUpdate()
             }
         }
     }
@@ -213,6 +216,7 @@ export function App() {
                 message.sentOrReceived = 'received'
 
                 peer.messages = [...(peer.messages || []), message]
+                sortMessages(peer)
                 forceUpdate()
             }
         }
@@ -222,5 +226,9 @@ export function App() {
         return (event: Event) => {
             console.log('Received negotiation needed: ' + JSON.stringify(event))
         }
+    }
+
+    function sortMessages(peer: Peer) {
+        peer.messages?.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     }
 }
