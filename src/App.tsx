@@ -1,5 +1,5 @@
 import styles from 'App.module.scss'
-import { useState } from 'react'
+import { useReducer, useState } from 'react'
 
 interface Peer {
     conn: RTCPeerConnection
@@ -15,6 +15,7 @@ export function App() {
     const [offer, setOffer] = useState<RTCSessionDescription | null>()
     const [reveivedOffer, setReceivedOffer] = useState<RTCSessionDescription | null>()
     const [peers, setPeers] = useState<Peer[]>([])
+    const [, forceUpdate] = useReducer(x => x + 1, 0)
 
     return (
         <div className={styles.container}>
@@ -137,7 +138,7 @@ export function App() {
 
             if (event.isTrusted) {
                 peer.enabled = true
-                setPeers([...peers])
+                forceUpdate()
                 return
             }
 
@@ -193,7 +194,7 @@ export function App() {
 
             if (event.isTrusted) {
                 peer.receivedMessages = [...(peer.receivedMessages || []), event.data]
-                setPeers([...peers])
+                forceUpdate()
             }
         }
     }
