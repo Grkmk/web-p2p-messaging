@@ -3,6 +3,10 @@ import { v4 as uuidV4 } from 'uuid'
 
 export interface Peer {
     id: string
+    // TODO: add username
+    // 	- when creating offer, pass to signal own name
+    // 	- when receiving offer, set from offer signal
+    // 	- when receiving answer, set from answer signal
     conn: RTCPeerConnection
     chan?: RTCDataChannel
     enabled?: true
@@ -11,6 +15,7 @@ export interface Peer {
 
 export interface Signal {
     id: string
+    // TODO: add username (should always be overwritten with sender's name)
     description: RTCSessionDescriptionInit
 }
 
