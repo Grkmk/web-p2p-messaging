@@ -1,27 +1,6 @@
 import styles from 'App.module.scss'
+import { createPeerFromOffer, createPeerToOffer, Peer, receiveAnswer, sendMessage, Signal } from 'connection'
 import { useReducer, useState } from 'react'
-import { v4 as uuidV4 } from 'uuid'
-
-interface Peer {
-    id: string
-    conn: RTCPeerConnection
-    chan?: RTCDataChannel
-    enabled?: true
-    messages?: Message[]
-}
-
-interface Signal {
-    id: string
-    description: RTCSessionDescriptionInit
-}
-
-interface Message {
-    data: string
-    date: string // should be parseable Date
-    sentOrReceived: 'sent' | 'received'
-}
-
-const ICE_SERVERS: RTCIceServer[] = [{ urls: 'stun:stun1.l.google.com:19302' }]
 
 export function App() {
     const [offer, setOffer] = useState<Signal | null>()
@@ -79,24 +58,8 @@ export function App() {
 
     async function handleGenerateOffer(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault()
-        // Create the local connection and its event listeners
-        const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
 
-        const peer: Peer = { id: uuidV4(), conn }
-
-        // Create the data channel and establish its event listeners
-        peer.chan = conn.createDataChannel('chan' + peer.id)
-        peer.chan.onopen = handleChannelStatusChange(peer)
-        peer.chan.onclose = handleChannelStatusChange(peer)
-        peer.chan.onmessage = handleReceiveMessage(peer)
-        peer.conn.onnegotiationneeded = handleOnNegotiationNeeded(peer)
-
-        // Set up the ICE candidate for the connection
-        conn.onicecandidate = handleIceCandidateForOffer(peer)
-
-        // Now create an offer to connect; this starts the process
-        const desc = await conn.createOffer()
-        await conn.setLocalDescription(desc)
+        const peer = await createPeerToOffer(setOffer, forceUpdate)
 
         peers[peer.id] = peer
         forceUpdate()
@@ -105,22 +68,8 @@ export function App() {
     async function handleReceiveOffer(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
-        const signalOffer: Signal = JSON.parse(e.currentTarget.offer.value)
-
-        // Create the remote connection and its event listeners
-        const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
-        const peer: Peer = { id: signalOffer.id, conn }
-        peer.chan = conn.createDataChannel('chan' + peer.id)
-        conn.ondatachannel = receiveDataChannel(peer)
-        peer.conn.onnegotiationneeded = handleOnNegotiationNeeded(peer)
-
-        // Set up the ICE candidates for the two peers
-        conn.onicecandidate = handleIceCandidateForAnswer(peer)
-
-        // Now create an offer to connect; this starts the process
-        await conn.setRemoteDescription(signalOffer.description)
-        const answer = await conn.createAnswer()
-        await conn.setLocalDescription(answer)
+        const offer: Signal = JSON.parse(e.currentTarget.offer.value)
+        const peer = await createPeerFromOffer(offer, setReceivedOffer, forceUpdate)
 
         peers[peer.id] = peer
         forceUpdate()
@@ -129,106 +78,17 @@ export function App() {
     async function handleAnswer(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
-        const signalAnswer: Signal = JSON.parse(e.currentTarget.answer.value)
-        const peer = peers[signalAnswer.id]
+        const answer: Signal = JSON.parse(e.currentTarget.answer.value)
+        const peer = peers[answer.id]
 
-        await peer.conn.setRemoteDescription(signalAnswer.description)
+        await receiveAnswer(peer, answer)
     }
 
     function handleSendMessage(peer: Peer) {
         return (e: React.FormEvent<HTMLFormElement>) => {
             e.preventDefault()
-
-            const message: Message = {
-                data: e.currentTarget.message.value as string,
-                date: new Date().toISOString(),
-                sentOrReceived: 'sent',
-            }
-
-            if (peer.chan?.readyState === 'open') {
-                peer.chan.send(JSON.stringify(message))
-                peer.messages = [...(peer.messages || []), message]
-                sortMessages(peer)
-                forceUpdate()
-            }
+            const message: string = e.currentTarget.message.value
+            sendMessage(peer, message, forceUpdate)
         }
-    }
-
-    function handleChannelStatusChange(peer: Peer) {
-        return (event: Event) => {
-            console.log('Received channel status change: ' + JSON.stringify(event))
-
-            if (event.isTrusted) {
-                peer.enabled = true
-                forceUpdate()
-                return
-            }
-
-            peer.chan?.close()
-        }
-    }
-
-    function receiveDataChannel(peer: Peer) {
-        return (event: RTCDataChannelEvent) => {
-            console.log('Received datachannel: ' + JSON.stringify(event))
-
-            peer.chan = event.channel
-            peer.chan.onmessage = handleReceiveMessage(peer)
-            peer.chan.onopen = handleChannelStatusChange(peer)
-            peer.chan.onclose = handleChannelStatusChange(peer)
-        }
-    }
-
-    function handleIceCandidateForOffer(peer: Peer) {
-        return (event: RTCPeerConnectionIceEvent) => {
-            console.log('Received ICE for offer: ' + JSON.stringify(event))
-
-            if (event.candidate) {
-                peer.conn.addIceCandidate(event.candidate)
-            }
-
-            if (event.isTrusted) {
-                setOffer({ id: peer.id, description: peer.conn.localDescription as RTCSessionDescriptionInit })
-            }
-        }
-    }
-
-    function handleIceCandidateForAnswer(peer: Peer) {
-        return (event: RTCPeerConnectionIceEvent) => {
-            console.log('Received ICE for answer: ' + JSON.stringify(event))
-
-            if (event.candidate) {
-                peer.conn.addIceCandidate(event.candidate)
-            }
-
-            if (event.isTrusted) {
-                setReceivedOffer({ id: peer.id, description: peer.conn.localDescription as RTCSessionDescriptionInit })
-            }
-        }
-    }
-
-    function handleReceiveMessage(peer: Peer) {
-        return (event: MessageEvent) => {
-            console.log('Received message: ' + JSON.stringify(event))
-
-            if (event.isTrusted) {
-                const message: Message = JSON.parse(event.data)
-                message.sentOrReceived = 'received'
-
-                peer.messages = [...(peer.messages || []), message]
-                sortMessages(peer)
-                forceUpdate()
-            }
-        }
-    }
-
-    function handleOnNegotiationNeeded(peer: Peer) {
-        return (event: Event) => {
-            console.log('Received negotiation needed: ' + JSON.stringify(event))
-        }
-    }
-
-    function sortMessages(peer: Peer) {
-        peer.messages?.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     }
 }
