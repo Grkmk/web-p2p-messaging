@@ -1,9 +1,9 @@
+import styles from './App.module.scss'
 import WelcomingModal from './components/Modal'
-import {createPortal} from "react-dom"
 
 export function App() {
     return (
-        <div className="App">
+        <div className={styles.container}>
             <WelcomingModal />
         </div>
     )
