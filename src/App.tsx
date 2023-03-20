@@ -1,4 +1,5 @@
-import WelcomingModal from './landing-page/modal'
+import WelcomingModal from './components/Modal'
+import {createPortal} from "react-dom"
 
 export function App() {
     return (
