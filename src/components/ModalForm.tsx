@@ -1,20 +1,18 @@
 import React, {useState, FormEvent, Component} from 'react'
+import styles from './Modal.module.scss'
 
 interface Props {
-    onSubmitUsername: (e: FormEvent, username: string) => void
+    onSubmitUsername: (e: FormEvent<HTMLFormElement>) => void
 }
 
 export default function ModalContent(props: Props) {
-    const [username, setUsername] = useState('')
     return (
-        <div className="modalContent">
-            <form onSubmit={e => props.onSubmitUsername(e, username)}>
-                <label style={{color: 'white'}}>
-                    Please enter a username:
-                    <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
-                </label>
-                <input type="submit" value="Submit"/>
-            </form>
-        </div>
+        <form method="post" className={styles.modalContent} onSubmit={e => props.onSubmitUsername(e)}>
+            <label className={styles.modalLabel}>
+                Please enter a username:
+                <input type="text" name="usernameField" />
+            </label>
+            <input type="submit" name="submitField" value="Submit"/>
+        </form>
     )
 }

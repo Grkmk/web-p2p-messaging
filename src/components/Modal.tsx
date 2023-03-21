@@ -1,13 +1,12 @@
 import React, {FormEvent, useState} from 'react'
-import './Modal.scss'
 import {createPortal} from "react-dom"
 import ModalContent from "./ModalForm"
 
-export default function WelcomingModal() {
+export function WelcomingModal() {
     const [showModal, setShowModal] = useState(true);
     return (
         <>
-            {showModal && createPortal(
+            {!sessionStorage.getItem('username') && showModal && createPortal(
                 <ModalContent
                     onSubmitUsername={handleSubmitUsername}
                 />,
@@ -16,10 +15,13 @@ export default function WelcomingModal() {
         </>
     );
 
-    function handleSubmitUsername(e: FormEvent, username: string) {
+    function handleSubmitUsername(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
 
-        sessionStorage.setItem("username", username);
+        const formData = new FormData(e.target as HTMLFormElement);
+        const formJson = Object.fromEntries(formData.entries());
+        sessionStorage.setItem("username", formJson['usernameField'] as string);
         setShowModal(false);
+        console.log(sessionStorage.getItem('username'));
     }
 }

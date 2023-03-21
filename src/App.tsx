@@ -1,5 +1,5 @@
 import styles from 'App.module.scss'
-import WelcomingModal from './components/Modal'
+import { WelcomingModal } from './components/Modal'
 
 export function App() {
     return (
