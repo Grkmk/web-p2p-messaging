@@ -25,9 +25,11 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-scripts": "5.0.1",
-        "typescript": "^4.9.5"
+        "typescript": "^4.9.5",
+        "uuid": "^9.0.0"
     },
     "devDependencies": {
+        "@types/uuid": "^9.0.1",
         "@typescript-eslint/eslint-plugin": "^5.51.0",
         "eslint": "^8.34.0",
         "eslint-plugin-prettier": "^4.2.1",
@@ -58,10 +60,7 @@
             "no-return-await": "warn",
             "no-else-return": "error",
             "no-console": "warn",
-            "react/jsx-boolean-value": [
-                2,
-                "always"
-            ],
+            "react/jsx-boolean-value": "off",
             "react/self-closing-comp": [
                 2,
                 {
