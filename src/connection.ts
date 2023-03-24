@@ -4,7 +4,7 @@ import { v4 as uuidV4 } from 'uuid'
 export interface Peer {
     id: string
     // TODO: add username
-    username?: string
+    username: string
     // 	- when creating offer, pass to signal own name
     // 	- when receiving offer, set from offer signal
     // 	- when receiving answer, set from answer signal
@@ -17,7 +17,7 @@ export interface Peer {
 export interface Signal {
     id: string
     // TODO: add username (should always be overwritten with sender's name)
-    username?: string
+    username: string
     description: RTCSessionDescriptionInit
 }
 
@@ -33,8 +33,8 @@ export async function createPeerToOffer(onSuccess: (offer: Signal) => void, onCh
     // Create the local connection and its event listeners
     const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
 
-    const peer: Peer = { id: uuidV4(), conn }
-    peer.username = sessionStorage.getItem('username') || 'Anonymous'
+    const peer: Peer = { id: uuidV4(), username: sessionStorage.getItem('username') || 'Invalid Name', conn }
+    //peer.username = sessionStorage.getItem('username') || 'Anonymous'
     console.log(peer.username + ' should be ' + sessionStorage.getItem('username'))
     console.log('Create Peer to Offer Function')
 
@@ -58,7 +58,7 @@ export async function createPeerToOffer(onSuccess: (offer: Signal) => void, onCh
 export async function createPeerFromOffer(offer: Signal, onSuccess: (answer: Signal) => void, onChange: () => void) {
     // Create the remote connection and its event listeners
     const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
-    const peer: Peer = { id: offer.id, conn }
+    const peer: Peer = { id: offer.id, username: offer.username, conn }
     peer.chan = conn.createDataChannel('chan' + peer.id)
     conn.ondatachannel = receiveDataChannel(peer, onChange)
     peer.conn.onnegotiationneeded = handleOnNegotiationNeeded(peer)
@@ -129,7 +129,7 @@ function handleIceCandidateForOffer(peer: Peer, onSuccess: (signal: Signal) => v
         if (event.isTrusted) {
             onSuccess({
                 id: peer.id,
-                username: sessionStorage.getItem('username') || 'Anonymous',
+                username: peer.username,
                 description: peer.conn.localDescription as RTCSessionDescriptionInit,
             })
         }
@@ -147,7 +147,7 @@ function handleIceCandidateForAnswer(peer: Peer, onSuccess: (signal: Signal) => 
         if (event.isTrusted) {
             onSuccess({
                 id: peer.id,
-                username: sessionStorage.getItem('username') || 'Anonymous',
+                username: peer.username,
                 description: peer.conn.localDescription as RTCSessionDescriptionInit,
             })
         }
