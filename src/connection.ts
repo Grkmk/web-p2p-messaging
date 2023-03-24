@@ -4,6 +4,7 @@ import { v4 as uuidV4 } from 'uuid'
 export interface Peer {
     id: string
     // TODO: add username
+    username?: string
     // 	- when creating offer, pass to signal own name
     // 	- when receiving offer, set from offer signal
     // 	- when receiving answer, set from answer signal
@@ -16,6 +17,7 @@ export interface Peer {
 export interface Signal {
     id: string
     // TODO: add username (should always be overwritten with sender's name)
+    username?: string
     description: RTCSessionDescriptionInit
 }
 
@@ -32,6 +34,9 @@ export async function createPeerToOffer(onSuccess: (offer: Signal) => void, onCh
     const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
 
     const peer: Peer = { id: uuidV4(), conn }
+    peer.username = sessionStorage.getItem('username') || 'Anonymous'
+    console.log(peer.username + ' should be ' + sessionStorage.getItem('username'))
+    console.log('Create Peer to Offer Function')
 
     // Create the data channel and establish its event listeners
     peer.chan = conn.createDataChannel('chan' + peer.id)
@@ -122,7 +127,11 @@ function handleIceCandidateForOffer(peer: Peer, onSuccess: (signal: Signal) => v
         }
 
         if (event.isTrusted) {
-            onSuccess({ id: peer.id, description: peer.conn.localDescription as RTCSessionDescriptionInit })
+            onSuccess({
+                id: peer.id,
+                username: sessionStorage.getItem('username') || 'Anonymous',
+                description: peer.conn.localDescription as RTCSessionDescriptionInit,
+            })
         }
     }
 }
@@ -136,7 +145,11 @@ function handleIceCandidateForAnswer(peer: Peer, onSuccess: (signal: Signal) => 
         }
 
         if (event.isTrusted) {
-            onSuccess({ id: peer.id, description: peer.conn.localDescription as RTCSessionDescriptionInit })
+            onSuccess({
+                id: peer.id,
+                username: sessionStorage.getItem('username') || 'Anonymous',
+                description: peer.conn.localDescription as RTCSessionDescriptionInit,
+            })
         }
     }
 }
