@@ -33,7 +33,7 @@ export async function createPeerToOffer(onSuccess: (offer: Signal) => void, onCh
     // Create the local connection and its event listeners
     const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
 
-    const peer: Peer = { id: uuidV4(), username: sessionStorage.getItem('username') || 'Invalid Name', conn }
+    const peer: Peer = { id: uuidV4(), username: 'not yet set', conn }
     //peer.username = sessionStorage.getItem('username') || 'Anonymous'
     console.log(peer.username + ' should be ' + sessionStorage.getItem('username'))
     console.log('Create Peer to Offer Function')
@@ -75,6 +75,7 @@ export async function createPeerFromOffer(offer: Signal, onSuccess: (answer: Sig
 }
 
 export async function receiveAnswer(peer: Peer, answer: Signal) {
+    peer.username = answer.username
     await peer.conn.setRemoteDescription(answer.description)
 }
 
@@ -129,7 +130,7 @@ function handleIceCandidateForOffer(peer: Peer, onSuccess: (signal: Signal) => v
         if (event.isTrusted) {
             onSuccess({
                 id: peer.id,
-                username: peer.username,
+                username: sessionStorage.getItem('username') || 'Invalid Name',
                 description: peer.conn.localDescription as RTCSessionDescriptionInit,
             })
         }
@@ -147,7 +148,7 @@ function handleIceCandidateForAnswer(peer: Peer, onSuccess: (signal: Signal) => 
         if (event.isTrusted) {
             onSuccess({
                 id: peer.id,
-                username: peer.username,
+                username: sessionStorage.getItem('username') || 'Invalid Name',
                 description: peer.conn.localDescription as RTCSessionDescriptionInit,
             })
         }
