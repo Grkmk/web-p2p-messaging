@@ -28,7 +28,8 @@ export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer }: Prop
         return (
             <div onClick={handlePeerClick(peer)}>
                 {/* TODO: replace with peer name */}
-                {peer.id}
+                {/* changed to peer name*/}
+                {peer.username}
                 {/* TODO: move to modal & only show an icon button */}
                 <form onSubmit={e => handleAnswer(e)}>
                     <textarea name="answer" />
@@ -44,7 +45,8 @@ export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer }: Prop
         return (
             <div onClick={handlePeerClick(peer)}>
                 {/* TODO: replace with peer name */}
-                {peer.id}
+                {/*changed to peer.username*/}
+                {peer.username}
                 {/* TODO: replace text with remove icon */}
                 <button onClick={handleRemovePeer(peer)}>remove</button>
             </div>
