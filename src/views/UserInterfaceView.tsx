@@ -1,14 +1,30 @@
 import styles from './UserInterfaceView.module.scss'
-import { useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { Peer } from 'connection'
 import { MessagePanel } from 'components/MessagePanel'
 import { AddConnectionsContainer } from 'components/AddConnectionsContainer'
 import { Connections } from 'components/Connections'
+import { Instructions } from 'components/Instructions'
+
+const mockPeer: Peer = {
+    id: 'asdf',
+    username: 'mock user',
+    conn: new RTCPeerConnection(),
+    enabled: true,
+}
 
 export function UserInterfaceView() {
-    const [peers] = useState<Record<string, Peer>>({})
+    const [peers] = useState<Record<string, Peer>>({ [mockPeer.id]: mockPeer })
     const [selectedPeer, setSelectedPeer] = useState<Peer | null>()
+    const [showWelcome, setShowWelcome] = useState<boolean>(true)
+    const [showInstructions, setShowInstructions] = useState<boolean>(false)
     const [, forceUpdate] = useReducer(x => x + 1, 0)
+
+    useEffect(() => {
+        if (showWelcome && !!Object.keys(peers).length) {
+            setShowWelcome(false)
+        }
+    }, [peers, showWelcome])
 
     return (
         <div className={styles.container}>
@@ -27,25 +43,46 @@ export function UserInterfaceView() {
                 />
             </div>
             <div className={styles.rightPanel}>
-                {/* should only be shown if there are connections */}
-                {!!peers && !selectedPeer && renderWelcomeMessage()}
+                {showWelcome && renderInstructions()}
                 {selectedPeer && <MessagePanel peer={selectedPeer} onSendMessage={forceUpdate} />}
             </div>
+            {showInstructions && <p>TODO: render instructions modal containing the instructions component</p>}
         </div>
     )
 
     function renderAppInfo() {
         return (
             <div className={styles.appInfo}>
-                <p>P2P messaging app</p>
-                <p>v1.0.0</p>
+                <strong>P2P messaging app &nbsp;|&nbsp; v1.0.0</strong>
+                {!showInstructions && <button onClick={() => setShowInstructions(true)}>Show instructions</button>}
             </div>
         )
     }
 
-    function renderWelcomeMessage() {
+    function renderInstructions() {
         return (
             <div className={styles.welcomeMessage}>
+                {showWelcome && renderWelcomeMessage()}
+                <Instructions />
+            </div>
+        )
+    }
+
+    function handleRemovePeer(id: string) {
+        const peer = peers[id]
+        if (!peer) {
+            return
+        }
+
+        peer.chan?.close()
+        peer.conn.close()
+
+        delete peers[id]
+    }
+
+    function renderWelcomeMessage() {
+        return (
+            <div>
                 <h2>Welcome to our P2P web messaging app</h2>
                 <p>
                     This is a web app to faciliate messaging with peers via the WebRTC protocol. The app provides solely
@@ -61,43 +98,7 @@ export function UserInterfaceView() {
                     <li>The app doesn't communicate or provide any information to internal or external parties</li>
                     <li>The app doesn't collect any metrics</li>
                 </ul>
-                <h3>How to use</h3>
-                There are two ways to connect to a peer, invite or be invited. In either approach, both peers need to
-                have & keep the website open.
-                <br />
-                <br />
-                Inviting a peer
-                <ol>
-                    <li>Generate an invite offer (see the left panel)</li>
-                    <li>Send the generated offer to the party you would like to invite by any means</li>
-                    <li>Ask your peer to generate an answer with the invite you sent and send it to you</li>
-                    <li>Find the peer under the inavtive peers list on the left panel</li>
-                    <li>Place and submit the received answer to establish connection</li>
-                    <li>Find & click on the user in the active list to open the message panel</li>
-                </ol>
-                Receiving an invite
-                <ol>
-                    <li>Place & submit the received invite offer (see the left panel)</li>
-                    <li>Send the generated answer to the peer by any means</li>
-                    <li>
-                        Wait for your peer place & submit your generated answer. If a connection was successfully
-                        established, the peer should appear in the active peers list
-                    </li>
-                    <li>Click on the user in the active list to open the message panel</li>
-                </ol>
             </div>
         )
-    }
-
-    function handleRemovePeer(id: string) {
-        const peer = peers[id]
-        if (!peer) {
-            return
-        }
-
-        peer.chan?.close()
-        peer.conn.close()
-
-        delete peers[id]
     }
 }
