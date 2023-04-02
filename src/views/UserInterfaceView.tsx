@@ -4,20 +4,34 @@ import { Peer } from 'connection'
 import { MessagePanel } from 'components/MessagePanel'
 import { AddConnectionsContainer } from 'components/AddConnectionsContainer'
 import { Connections } from 'components/Connections'
-import { Instructions } from 'components/Instructions'
 
+// TODO: remove after testing
 const mockPeer: Peer = {
     id: 'asdf',
     username: 'mock user',
     conn: new RTCPeerConnection(),
     enabled: true,
+    messages: [
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:40.162Z').toString() },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:41.162Z').toString() },
+        {
+            sentOrReceived: 'received',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        {
+            sentOrReceived: 'sent',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) as any,
 }
 
 export function UserInterfaceView() {
     const [peers] = useState<Record<string, Peer>>({ [mockPeer.id]: mockPeer })
     const [selectedPeer, setSelectedPeer] = useState<Peer | null>()
     const [showWelcome, setShowWelcome] = useState<boolean>(true)
-    const [showInstructions, setShowInstructions] = useState<boolean>(false)
     const [, forceUpdate] = useReducer(x => x + 1, 0)
 
     useEffect(() => {
@@ -43,27 +57,27 @@ export function UserInterfaceView() {
                 />
             </div>
             <div className={styles.rightPanel}>
-                {showWelcome && renderInstructions()}
-                {selectedPeer && <MessagePanel peer={selectedPeer} onSendMessage={forceUpdate} />}
+                <MessagePanel
+                    peer={selectedPeer}
+                    onSendMessage={forceUpdate}
+                    showInstructionsWithWelcome={showWelcome}
+                />
             </div>
-            {showInstructions && <p>TODO: render instructions modal containing the instructions component</p>}
         </div>
     )
 
     function renderAppInfo() {
         return (
             <div className={styles.appInfo}>
-                <strong>P2P messaging app &nbsp;|&nbsp; v1.0.0</strong>
-                {!showInstructions && <button onClick={() => setShowInstructions(true)}>Show instructions</button>}
-            </div>
-        )
-    }
-
-    function renderInstructions() {
-        return (
-            <div className={styles.welcomeMessage}>
-                {showWelcome && renderWelcomeMessage()}
-                <Instructions />
+                <p>P2P messaging app &nbsp;|&nbsp; v1.0.0</p>
+                {/* because having a selected peer will hide the instructions and show the messages instead */}
+                {selectedPeer && (
+                    <button onClick={() => setSelectedPeer(null)}>
+                        Show
+                        <br />
+                        instructions
+                    </button>
+                )}
             </div>
         )
     }
@@ -78,27 +92,5 @@ export function UserInterfaceView() {
         peer.conn.close()
 
         delete peers[id]
-    }
-
-    function renderWelcomeMessage() {
-        return (
-            <div>
-                <h2>Welcome to our P2P web messaging app</h2>
-                <p>
-                    This is a web app to faciliate messaging with peers via the WebRTC protocol. The app provides solely
-                    an interface to send, receive and store messages. No information is stored or transmitted via third
-                    parties. To achieve this:
-                </p>
-                <ul>
-                    <li>The peer connections are established outside the app, completely up to the users</li>
-                    <li>
-                        The messages are stored in the peers' browser sessions and removed after the browser session is
-                        terminated
-                    </li>
-                    <li>The app doesn't communicate or provide any information to internal or external parties</li>
-                    <li>The app doesn't collect any metrics</li>
-                </ul>
-            </div>
-        )
     }
 }
