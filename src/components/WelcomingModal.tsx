@@ -1,13 +1,13 @@
 import React, {FormEvent, useState} from 'react'
 import {createPortal} from "react-dom"
-import ModalContent from "./ModalForm"
+import WelcomingModalForm from "./WelcomingModalForm"
 
 export function WelcomingModal() {
     const [showModal, setShowModal] = useState(true);
     return (
         <>
             {!sessionStorage.getItem('username') && showModal && createPortal(
-                <ModalContent
+                <WelcomingModalForm
                     onSubmitUsername={handleSubmitUsername}
                 />,
                 document.body
@@ -22,6 +22,5 @@ export function WelcomingModal() {
         const formJson = Object.fromEntries(formData.entries());
         sessionStorage.setItem("username", formJson['usernameField'] as string);
         setShowModal(false);
-        console.log(sessionStorage.getItem('username'));
     }
 }
