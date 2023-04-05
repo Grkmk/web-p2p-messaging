@@ -26,11 +26,9 @@ export function AddConnectionsContainer(props: Props) {
             <button onClick={e => handleGenerateOffer(e)}>Generate Offer</button>
             {showGenerateOffer && <GenerateOfferModal offer={JSON.stringify(offer)} handleClose={e => setShowGenerateOffer(false)}/>}
             <button onClick={e => setShowReceiveOffer(true)}>Receive Offer</button>
-            {showReceiveOffer && <ReceiveOfferModal onSubmitForm={e => handleReceiveOffer} handleClose={e => setShowReceiveOffer(false)}/>}
+            {showReceiveOffer && <ReceiveOfferModal receivedOffer={reveivedOffer} onSubmitForm={e => handleReceiveOffer(e)} handleClose={e => setShowReceiveOffer(false)}/>}
             <button onClick={e => setShowReceiveAnswer(true)}>Receive Answer</button>
-            {showReceiveAnswer && <ReceiveAnswerModal onSubmitForm={e => handleAnswer} handleClose={e => setShowReceiveAnswer(false)}/>}
-
-            {reveivedOffer && <pre>{JSON.stringify(reveivedOffer, null, 2)}</pre>}
+            {showReceiveAnswer && <ReceiveAnswerModal onSubmitForm={e => handleAnswer(e)} handleClose={e => setShowReceiveAnswer(false)}/>}
         </div>
     )
 
