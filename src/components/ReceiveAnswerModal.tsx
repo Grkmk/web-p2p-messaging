@@ -14,10 +14,10 @@ export function ReceiveAnswerModal(props: Props) {
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
                         <form onSubmit={e => props.onSubmitForm(e)}>
-                            <textarea name="offer" />
+                            <textarea name="answer" />
                             <button type="submit">Receive Answer</button>
-                            <button onClick={e => props.handleClose(false)}>Close</button>
                         </form>
+                        <button onClick={e => props.handleClose(false)}>Close</button>
                     </div>
                 </div>,
                 document.body

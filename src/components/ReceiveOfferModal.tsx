@@ -15,12 +15,12 @@ export function ReceiveOfferModal(props: Props) {
             {createPortal(
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
-                        <form onSubmit={e => props.onSubmitForm(e)}>
+                        <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => props.onSubmitForm(e)}>
                             <textarea name="offer" />
                             <button type="submit">Receive Offer</button>
-                            <button onClick={e => props.handleClose(false)}>Close</button>
-                            {props.receivedOffer && <div>{JSON.stringify(props.receivedOffer, null, 2)}</div>}
                         </form>
+                        <button onClick={e => props.handleClose(false)}>Close</button>
+                        {props.receivedOffer && <div>{JSON.stringify(props.receivedOffer, null, 2)}</div>}
                     </div>
                 </div>,
                 document.body
