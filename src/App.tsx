@@ -1,6 +1,6 @@
 import 'App.module.scss'
 import { UserInterfaceView } from 'views/UserInterfaceView'
-import { WelcomingModal } from './components/Modal'
+import { WelcomingModal } from './components/WelcomingModal'
 
 export function App() {
     return (
