@@ -26,7 +26,7 @@ export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer }: Prop
 
     function renderInactivePeer(peer: Peer) {
         return (
-            <div onClick={handlePeerClick(peer)}>
+            <div key={peer.id} onClick={handlePeerClick(peer)}>
                 {peer.username}
                 {/* TODO: move to modal & only show an icon button */}
                 <form onSubmit={e => handleAnswer(e)}>
@@ -41,7 +41,7 @@ export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer }: Prop
 
     function renderActivePeer(peer: Peer) {
         return (
-            <div onClick={handlePeerClick(peer)}>
+            <div key={peer.id} onClick={handlePeerClick(peer)}>
                 {peer.username}
                 {/* TODO: replace text with remove icon */}
                 <button onClick={handleRemovePeer(peer)}>remove</button>
