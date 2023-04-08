@@ -9,7 +9,7 @@ export interface Peer {
     // 	- when receiving answer, set from answer signal
     conn: RTCPeerConnection
     chan?: RTCDataChannel
-    enabled?: true
+    enabled?: boolean
     messages?: Message[]
 }
 
@@ -172,5 +172,5 @@ function handleOnNegotiationNeeded(peer: Peer) {
 }
 
 function sortMessages(peer: Peer) {
-    peer.messages?.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    peer.messages?.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }

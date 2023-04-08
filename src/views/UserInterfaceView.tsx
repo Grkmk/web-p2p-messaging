@@ -6,11 +6,11 @@ import { AddConnectionsContainer } from 'components/AddConnectionsContainer'
 import { Connections } from 'components/Connections'
 
 // TODO: remove after testing
-const mockPeer: Peer = {
-    id: 'asdf',
-    username: 'mock user',
+const mockPeer = (): Peer => ({
+    id: (Math.random() * 100).toString(),
+    username: 'mock user' + (Math.random() * 100).toString(),
     conn: new RTCPeerConnection(),
-    enabled: true,
+    enabled: Math.random() > 0.5,
     messages: [
         { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:40.162Z').toString() },
         { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:41.162Z').toString() },
@@ -24,12 +24,89 @@ const mockPeer: Peer = {
             data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
             date: new Date('2023-04-02T10:19:42.162Z').toString(),
         },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:40.162Z').toString() },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:41.162Z').toString() },
+        {
+            sentOrReceived: 'received',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        {
+            sentOrReceived: 'sent',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:40.162Z').toString() },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:41.162Z').toString() },
+        {
+            sentOrReceived: 'received',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        {
+            sentOrReceived: 'sent',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:40.162Z').toString() },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:41.162Z').toString() },
+        {
+            sentOrReceived: 'received',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        {
+            sentOrReceived: 'sent',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:40.162Z').toString() },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:41.162Z').toString() },
+        {
+            sentOrReceived: 'received',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        {
+            sentOrReceived: 'sent',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:40.162Z').toString() },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:41.162Z').toString() },
+        {
+            sentOrReceived: 'received',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        {
+            sentOrReceived: 'sent',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:40.162Z').toString() },
+        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:41.162Z').toString() },
+        {
+            sentOrReceived: 'received',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
+        {
+            sentOrReceived: 'sent',
+            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
+            date: new Date('2023-04-02T10:19:42.162Z').toString(),
+        },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) as any,
-}
+    ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) as any,
+})
+
+const mockedPeers = Array.from({ length: 50 }, () => mockPeer()).reduce((acc, peer) => {
+    acc[peer.id] = peer
+    return acc
+}, {} as Record<string, Peer>)
 
 export function UserInterfaceView() {
-    const [peers] = useState<Record<string, Peer>>({ [mockPeer.id]: mockPeer })
+    const [peers] = useState<Record<string, Peer>>(mockedPeers)
     const [selectedPeer, setSelectedPeer] = useState<Peer | null>()
     const [showWelcome, setShowWelcome] = useState<boolean>(true)
     const [, forceUpdate] = useReducer(x => x + 1, 0)
@@ -47,6 +124,7 @@ export function UserInterfaceView() {
                 <Connections
                     peers={Object.values(peers)}
                     onSelectPeer={setSelectedPeer}
+                    selectedPeerId={selectedPeer?.id}
                     onRemovePeer={id => handleRemovePeer(id)}
                     getPeer={id => peers[id]}
                 />

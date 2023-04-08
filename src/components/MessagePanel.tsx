@@ -61,7 +61,7 @@ export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome 
     function renderWelcomeMessage() {
         return (
             <div>
-                <h2>Welcome to our P2P web messaging app</h2>
+                <h2>Welcome to the P2P web messaging app</h2>
                 <p>
                     This is a web app to faciliate messaging with peers via the WebRTC protocol. The app provides solely
                     an interface to send, receive and store messages. No information is stored or transmitted via third

@@ -4,6 +4,8 @@ export function Instructions() {
     return (
         <div>
             <h3>How to use</h3>
+            <hr />
+            <br />
             There are two ways to connect to a peer, invite or be invited. In either approach, both peers need to have &
             keep the website open.
             <br />
@@ -13,7 +15,7 @@ export function Instructions() {
                 <li>Generate an invite offer (see the left panel)</li>
                 <li>Send the generated offer to the party you would like to invite by any means</li>
                 <li>Ask your peer to generate an answer with the invite you sent and send it to you</li>
-                <li>Find the peer under the inavtive peers list on the left panel</li>
+                <li>Find the peer under the inactive peers list on the left panel</li>
                 <li>Place and submit the received answer to establish connection</li>
                 <li>Find & click on the user in the active list to open the message panel</li>
             </ol>
