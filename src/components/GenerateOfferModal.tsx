@@ -1,4 +1,4 @@
-import {createPortal} from "react-dom"
+import { createPortal } from 'react-dom'
 import styles from './Modal.module.scss'
 
 interface Props {
@@ -22,7 +22,7 @@ export function GenerateOfferModal(props: Props) {
         </>
     )
 
-    function handleCopyToClipboard() {
-        navigator.clipboard.writeText(props.offer).then(() => console.log("Copied"));
+    async function handleCopyToClipboard() {
+        await navigator.clipboard.writeText(props.offer)
     }
 }

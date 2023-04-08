@@ -1,4 +1,4 @@
-import React, {useState, FormEvent, Component} from 'react'
+import { FormEvent } from 'react'
 import styles from './Modal.module.scss'
 
 interface Props {
@@ -12,7 +12,7 @@ export default function ModalContent(props: Props) {
                 <label className={styles.modalLabel}>
                     Please enter a username:
                     <input type="text" name="usernameField" />
-                    <input type="submit" name="submitField" value="Submit"/>
+                    <input type="submit" name="submitField" value="Submit" />
                 </label>
             </form>
         </div>

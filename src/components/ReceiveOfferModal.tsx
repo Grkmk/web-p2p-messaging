@@ -1,12 +1,11 @@
-import {FormEvent, useState} from "react"
-import {createPortal} from "react-dom"
+import { createPortal } from 'react-dom'
 import styles from './Modal.module.scss'
-import {Signal} from "../connection"
+import { Signal } from '../connection'
 
 interface Props {
     onSubmitForm: (e: React.FormEvent<HTMLFormElement>) => void
     handleClose: (state: boolean) => void
-    receivedOffer: Signal | null | undefined;
+    receivedOffer: Signal | null | undefined
 }
 
 export function ReceiveOfferModal(props: Props) {
