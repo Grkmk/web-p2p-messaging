@@ -45,10 +45,6 @@
         margin: auto 8px;
     }
 
-    button {
-        width: 100%;
-    }
-
     &:hover {
         background-color: lightgray;
         cursor: pointer;
@@ -56,6 +52,16 @@
 
     &:first-child {
         margin-top: 8px;
+    }
+}
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    * {
+        height: 100%;
     }
 }
 

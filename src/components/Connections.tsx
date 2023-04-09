@@ -2,6 +2,7 @@ import styles from './Connections.module.scss'
 import { Peer } from 'connection'
 import classnames from 'classnames'
 import { ReceiveAnswerModal } from './ReceiveAnswerModal'
+import { TrashIcon } from './icons/TrashIcon'
 
 interface Props {
     peers: Peer[]
@@ -40,10 +41,11 @@ export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer, select
         return (
             <div key={peer.id} onClick={handlePeerClick(peer)} className={className}>
                 <p>{peer.username}</p>
-                <div>
+                <div className={styles.buttonContainer}>
                     <ReceiveAnswerModal getPeer={getPeer} />
-                    {/* TODO: replace text with remove icon */}
-                    <button onClick={handleRemovePeer(peer)}>Remove</button>
+                    <button onClick={handleRemovePeer(peer)}>
+                        <TrashIcon />
+                    </button>
                 </div>
             </div>
         )
@@ -57,8 +59,11 @@ export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer, select
         return (
             <div key={peer.id} onClick={handlePeerClick(peer)} className={className}>
                 <p>{peer.username}</p>
-                {/* TODO: replace text with remove icon */}
-                <button onClick={handleRemovePeer(peer)}>Remove</button>
+                <div className={styles.buttonContainer}>
+                    <button onClick={handleRemovePeer(peer)}>
+                        <TrashIcon />
+                    </button>
+                </div>
             </div>
         )
     }

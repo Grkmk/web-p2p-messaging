@@ -1,6 +1,7 @@
 import styles from './ReceiveAnswerModal.module.scss'
 import { Peer, Signal, receiveAnswer } from 'connection'
 import { Modal } from './Modal'
+import { LinkIcon } from './icons/LinkIcon'
 
 interface Props {
     getPeer: (peerId: string) => Peer
@@ -17,7 +18,11 @@ export function ReceiveAnswerModal(props: Props) {
                         <textarea rows={10} className={styles.textarea} name="answer" />
                     </div>
                 )}
-                render={openModal => <button onClick={openModal}>Receive answer</button>}
+                render={openModal => (
+                    <button onClick={openModal}>
+                        <LinkIcon />
+                    </button>
+                )}
             />
         </form>
     )

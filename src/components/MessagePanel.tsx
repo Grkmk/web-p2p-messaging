@@ -2,6 +2,7 @@ import React from 'react'
 import { Peer, sendMessage } from 'connection'
 import styles from './MessagePanel.module.scss'
 import { Instructions } from './Instructions'
+import { PaperPlaneIcon } from './icons/PaperPlaneIcon'
 
 interface Props {
     peer?: Peer | null
@@ -30,7 +31,8 @@ export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome 
                     onChange={v => setHasMessage(!!v.target.value)}
                 />
                 <button type="submit" disabled={disabled || !hasMessage} className={styles.sendButton}>
-                    Send
+                    <p>Send</p>
+                    <PaperPlaneIcon />
                 </button>
             </form>
         </div>
