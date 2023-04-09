@@ -1,26 +1,33 @@
-import { createPortal } from 'react-dom'
-import styles from './Modal.module.scss'
+import styles from './ReceiveAnswerModal.module.scss'
+import { Peer, Signal, receiveAnswer } from 'connection'
+import { Modal } from './Modal'
 
 interface Props {
-    onSubmitForm: (e: React.FormEvent<HTMLFormElement>) => void
-    handleClose: (state: boolean) => void
+    getPeer: (peerId: string) => Peer
 }
 
 export function ReceiveAnswerModal(props: Props) {
     return (
-        <>
-            {createPortal(
-                <div className={styles.modal}>
-                    <div className={styles.modalContent}>
-                        <form onSubmit={e => props.onSubmitForm(e)}>
-                            <textarea name="answer" />
-                            <button type="submit">Receive Answer</button>
-                        </form>
-                        <button onClick={e => props.handleClose(false)}>Close</button>
+        <form onSubmit={e => handleAnswer(e)}>
+            <Modal
+                submit
+                renderModal={() => (
+                    <div>
+                        <p>Paste answer in the field below and submit</p>
+                        <textarea rows={10} className={styles.textarea} name="answer" />
                     </div>
-                </div>,
-                document.body
-            )}
-        </>
+                )}
+                render={openModal => <button onClick={openModal}>Receive answer</button>}
+            />
+        </form>
     )
+
+    async function handleAnswer(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+
+        const answer: Signal = JSON.parse(e.currentTarget.answer.value)
+        const peer = props.getPeer(answer.id)
+
+        await receiveAnswer(peer, answer)
+    }
 }

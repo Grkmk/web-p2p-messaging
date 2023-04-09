@@ -32,7 +32,7 @@
 .inactivePeer,
 .activePeer {
     margin: 8px 16px;
-    border: 1px solid lightgray;
+    border: 1px solid gray;
     padding: 8px;
     border-radius: 8px;
     display: grid;
@@ -60,8 +60,13 @@
 }
 
 .inactivePeer {
+    border-color: lightgray;
     * {
         color: gray;
+    }
+
+    &.selected > p {
+        color: white;
     }
 }
 

@@ -1,29 +1,64 @@
-import { createPortal } from 'react-dom'
-import styles from './Modal.module.scss'
-import { Signal } from '../connection'
+import styles from './ReceiveOfferModal.module.scss'
+import { Peer, Signal, createPeerFromOffer } from '../connection'
+import { Modal } from './Modal'
+import { useState } from 'react'
 
 interface Props {
-    onSubmitForm: (e: React.FormEvent<HTMLFormElement>) => void
-    handleClose: (state: boolean) => void
-    receivedOffer: Signal | null | undefined
+    onCreatePeer: (peer: Peer) => void
+    onChange: () => void
 }
 
 export function ReceiveOfferModal(props: Props) {
+    const [answer, setAnswer] = useState<Signal | null>()
+    const [loading, setLoading] = useState<boolean>(false)
+
     return (
-        <>
-            {createPortal(
-                <div className={styles.modal}>
-                    <div className={styles.modalContent}>
-                        <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => props.onSubmitForm(e)}>
-                            <textarea name="offer" />
-                            <button type="submit">Receive Offer</button>
+        <Modal
+            render={openModal => <button onClick={openModal}>Receive invite</button>}
+            onClose={() => {
+                setAnswer(null)
+                setLoading(false)
+            }}
+            renderModal={() => (
+                <div>
+                    <p>Paste the received invite into the field below</p>
+                    {answer ? (
+                        <div>
+                            <p>{JSON.stringify(answer)}</p>
+                            <button onClick={handleCopyToClipboard}>Copy offer to clipboard</button>
+                        </div>
+                    ) : (
+                        <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleReceiveOffer(e)}>
+                            <textarea className={styles.textarea} rows={10} name="offer" />
+                            {loading ? (
+                                <p>Processing invite, please wait...</p>
+                            ) : (
+                                <div>
+                                    <button type="submit">Receive invite</button>
+                                </div>
+                            )}
                         </form>
-                        <button onClick={e => props.handleClose(false)}>Close</button>
-                        {props.receivedOffer && <div>{JSON.stringify(props.receivedOffer, null, 2)}</div>}
-                    </div>
-                </div>,
-                document.body
+                    )}
+                </div>
             )}
-        </>
+        />
     )
+
+    async function handleReceiveOffer(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        setLoading(true)
+        const offer: Signal = JSON.parse(e.currentTarget.offer.value)
+        const peer = await createPeerFromOffer(offer, setAnswer, props.onChange)
+
+        props.onCreatePeer(peer)
+        setLoading(false)
+    }
+
+    async function handleCopyToClipboard() {
+        if (!answer) {
+            return
+        }
+
+        await navigator.clipboard.writeText(JSON.stringify(answer))
+    }
 }
