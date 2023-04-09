@@ -4,7 +4,7 @@ import React from 'react'
 
 interface Props {
     onClose?: () => void
-    submit?: boolean
+    handleSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
     render?: (openModal: () => void) => JSX.Element
     renderModal: () => React.ReactNode
     startOpen?: boolean
@@ -27,14 +27,14 @@ export function Modal(props: Props) {
                                         X
                                     </button>
                                 )}
-                                <div className={styles.content}>{props.renderModal()}</div>
-                                {props.submit && (
-                                    <div className={styles.submitButton}>
-                                        <button type="submit" onClick={handleClose}>
-                                            Submit
-                                        </button>
-                                    </div>
-                                )}
+                                <form onSubmit={e => handleSubmit(e)}>
+                                    <div className={styles.content}>{props.renderModal()}</div>
+                                    {props.handleSubmit && (
+                                        <div className={styles.submitButton}>
+                                            <button type="submit">Submit</button>
+                                        </div>
+                                    )}
+                                </form>
                             </div>
                         </div>
                     </div>,
@@ -45,7 +45,13 @@ export function Modal(props: Props) {
 
     function handleClose(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault()
-        setOpen(false)
         props.onClose?.()
+        setOpen(false)
+    }
+
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        props.handleSubmit?.(e)
+        setOpen(false)
     }
 }

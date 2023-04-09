@@ -9,22 +9,20 @@ interface Props {
 
 export function ReceiveAnswerModal(props: Props) {
     return (
-        <form onSubmit={e => handleAnswer(e)}>
-            <Modal
-                submit
-                renderModal={() => (
-                    <div>
-                        <p>Paste answer in the field below and submit</p>
-                        <textarea rows={10} className={styles.textarea} name="answer" />
-                    </div>
-                )}
-                render={openModal => (
-                    <button onClick={openModal}>
-                        <LinkIcon />
-                    </button>
-                )}
-            />
-        </form>
+        <Modal
+            handleSubmit={e => handleAnswer(e)}
+            renderModal={() => (
+                <div>
+                    <p>Paste answer in the field below and submit</p>
+                    <textarea rows={10} className={styles.textarea} name="answer" />
+                </div>
+            )}
+            render={openModal => (
+                <button onClick={openModal}>
+                    <LinkIcon />
+                </button>
+            )}
+        />
     )
 
     async function handleAnswer(e: React.FormEvent<HTMLFormElement>) {

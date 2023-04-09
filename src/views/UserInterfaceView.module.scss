@@ -22,15 +22,33 @@
     overflow: hidden;
 }
 
-.appInfo {
+.appInfoContainer {
     display: flex;
     justify-content: space-between;
     border-bottom: 2px solid lightgray;
     padding: 16px;
     background-color: silver;
+}
+
+.appInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    > div {
+        display: flex;
+        justify-content: space-between;
+    }
 
     p {
-        margin: auto;
         color: snow;
+        margin: 2px;
+    }
+
+    h2 {
+        color: gray;
+        margin: 0;
+        margin-left: 2px;
     }
 }
