@@ -1,5 +1,17 @@
 @import 'styles/_colors.scss';
 
+* {
+    font-family: 'Consolas';
+}
+
 body {
     margin: 0;
+}
+
+button {
+    cursor: pointer;
+}
+
+textarea {
+    resize: none;
 }

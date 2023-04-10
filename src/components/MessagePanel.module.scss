@@ -10,6 +10,7 @@
     height: 100%;
     display: flex;
     align-items: center;
+    overflow: hidden;
 }
 
 .instructions {
@@ -18,8 +19,11 @@
 
 .messages {
     padding: 16px;
-    display: block;
+    display: flex;
     align-self: flex-end;
+    overflow-y: auto;
+    height: 100%;
+    flex-direction: column-reverse;
 }
 
 .sentMessage,
@@ -106,4 +110,14 @@
 .sendButton {
     width: 120px;
     border-left: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 16px;
+
+    svg {
+        display: inline;
+        width: unset;
+        height: unset;
+    }
 }

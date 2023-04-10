@@ -2,6 +2,7 @@ import React from 'react'
 import { Peer, sendMessage } from 'connection'
 import styles from './MessagePanel.module.scss'
 import { Instructions } from './Instructions'
+import { PaperPlaneIcon } from './icons/PaperPlaneIcon'
 
 interface Props {
     peer?: Peer | null
@@ -30,7 +31,8 @@ export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome 
                     onChange={v => setHasMessage(!!v.target.value)}
                 />
                 <button type="submit" disabled={disabled || !hasMessage} className={styles.sendButton}>
-                    Send
+                    <p>Send</p>
+                    <PaperPlaneIcon />
                 </button>
             </form>
         </div>
@@ -61,7 +63,7 @@ export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome 
     function renderWelcomeMessage() {
         return (
             <div>
-                <h2>Welcome to our P2P web messaging app</h2>
+                <h2>Welcome to the P2P web messaging app</h2>
                 <p>
                     This is a web app to faciliate messaging with peers via the WebRTC protocol. The app provides solely
                     an interface to send, receive and store messages. No information is stored or transmitted via third

@@ -1,1 +1,84 @@
-.container {}
+.container {
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    > div {
+        position: relative;
+        overflow: hidden;
+        height: 50%;
+        border-bottom: 2px solid lightgray;
+    }
+
+    h5 {
+        margin-bottom: 12px;
+        margin-left: 8px;
+        font-weight: 600;
+    }
+}
+
+.noPeersMessage {
+    margin: 16px;
+}
+
+.peersContainer {
+    height: calc(100% - 50px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-top: 2px solid gray;
+}
+
+.inactivePeer,
+.activePeer {
+    margin: 8px 16px;
+    border: 1px solid gray;
+    padding: 8px;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+
+    p {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: auto 8px;
+    }
+
+    &:hover {
+        background-color: lightgray;
+        cursor: pointer;
+    }
+
+    &:first-child {
+        margin-top: 8px;
+    }
+}
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    * {
+        height: 100%;
+    }
+}
+
+.inactivePeer {
+    border-color: lightgray;
+    * {
+        color: gray;
+    }
+
+    &.selected > p {
+        color: white;
+    }
+}
+
+.selected,
+.selected:hover {
+    background-color: lightslategray;
+    border-color: lightslategray;
+    color: white;
+}

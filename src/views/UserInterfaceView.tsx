@@ -1,38 +1,17 @@
 import styles from './UserInterfaceView.module.scss'
-import { useEffect, useReducer, useState } from 'react'
+import { useContext, useEffect, useReducer, useState } from 'react'
 import { Peer } from 'connection'
 import { MessagePanel } from 'components/MessagePanel'
 import { AddConnectionsContainer } from 'components/AddConnectionsContainer'
 import { Connections } from 'components/Connections'
-
-// TODO: remove after testing
-const mockPeer: Peer = {
-    id: 'asdf',
-    username: 'mock user',
-    conn: new RTCPeerConnection(),
-    enabled: true,
-    messages: [
-        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:40.162Z').toString() },
-        { sentOrReceived: 'sent', data: 'hello', date: new Date('2023-04-02T10:19:41.162Z').toString() },
-        {
-            sentOrReceived: 'received',
-            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
-            date: new Date('2023-04-02T10:19:42.162Z').toString(),
-        },
-        {
-            sentOrReceived: 'sent',
-            data: 'asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf asdfasdfasdf asdfasdf asdfasdfasdf asdfasd fasdfasdf asdfasdfasdfasd fasdfasd fas df sfasdfasdf asdfa sdfa sdf',
-            date: new Date('2023-04-02T10:19:42.162Z').toString(),
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()) as any,
-}
+import { UserContext } from 'App'
 
 export function UserInterfaceView() {
-    const [peers] = useState<Record<string, Peer>>({ [mockPeer.id]: mockPeer })
+    const [peers] = useState<Record<string, Peer>>({})
     const [selectedPeer, setSelectedPeer] = useState<Peer | null>()
     const [showWelcome, setShowWelcome] = useState<boolean>(true)
     const [, forceUpdate] = useReducer(x => x + 1, 0)
+    const username = useContext(UserContext).username
 
     useEffect(() => {
         if (showWelcome && !!Object.keys(peers).length) {
@@ -47,6 +26,7 @@ export function UserInterfaceView() {
                 <Connections
                     peers={Object.values(peers)}
                     onSelectPeer={setSelectedPeer}
+                    selectedPeerId={selectedPeer?.id}
                     onRemovePeer={id => handleRemovePeer(id)}
                     getPeer={id => peers[id]}
                 />
@@ -68,9 +48,16 @@ export function UserInterfaceView() {
 
     function renderAppInfo() {
         return (
-            <div className={styles.appInfo}>
-                <p>P2P messaging app &nbsp;|&nbsp; v1.0.0</p>
-                {/* because having a selected peer will hide the instructions and show the messages instead */}
+            <div className={styles.appInfoContainer}>
+                <div className={styles.appInfo}>
+                    <h2>{username}</h2>
+                    <div>
+                        <p>P2P messaging app</p>
+                        <p>|</p>
+                        <p>v1.0</p>
+                        {/* because having a selected peer will hide the instructions and show the messages instead */}
+                    </div>
+                </div>
                 {selectedPeer && (
                     <button onClick={() => setSelectedPeer(null)}>
                         Show

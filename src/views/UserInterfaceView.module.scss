@@ -4,22 +4,51 @@
     width: 100vw;
     height: 100vh;
     position: relative;
+    overflow: hidden;
 }
 
 .leftPanel {
     height: 100%;
     width: 100%;
     border-right: 2px solid lightgray;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: 94px auto 94px;
 }
 
 .rightPanel {
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
-.appInfo {
+.appInfoContainer {
     display: flex;
     justify-content: space-between;
     border-bottom: 2px solid lightgray;
     padding: 16px;
+    background-color: silver;
+}
+
+.appInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    > div {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    p {
+        color: snow;
+        margin: 2px;
+    }
+
+    h2 {
+        color: gray;
+        margin: 0;
+        margin-left: 2px;
+    }
 }
