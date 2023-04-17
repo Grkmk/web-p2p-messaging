@@ -8,7 +8,7 @@ interface Props {
     peers: Peer[]
     selectedPeerId?: string | null
     getPeer: (id: string) => Peer
-    onSelectPeer: (peer: Peer) => void
+    onSelectPeer: (peer?: Peer) => void
     onRemovePeer: (id: string) => void
 }
 
@@ -75,6 +75,12 @@ export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer, select
     function handlePeerClick(peer: Peer) {
         return (e: React.MouseEvent<HTMLDivElement>) => {
             e.preventDefault()
+
+            if (selectedPeerId === peer.id) {
+                onSelectPeer()
+                return
+            }
+
             onSelectPeer(peer)
         }
     }
@@ -82,6 +88,7 @@ export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer, select
     function handleRemovePeer(peer: Peer) {
         return (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault()
+            e.stopPropagation()
             onRemovePeer(peer.id)
         }
     }

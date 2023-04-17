@@ -13,7 +13,7 @@ export function WelcomingModal(props: Props) {
             renderModal={() => (
                 <div>
                     <p>Please enter a username</p>
-                    <input type="text" name="usernameField" />
+                    <input autoComplete="off" type="text" name="usernameField" />
                 </div>
             )}
         />

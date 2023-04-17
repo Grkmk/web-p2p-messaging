@@ -14,11 +14,11 @@ export function ReceiveAnswerModal(props: Props) {
             renderModal={() => (
                 <div>
                     <p>Paste answer in the field below and submit</p>
-                    <textarea rows={10} className={styles.textarea} name="answer" />
+                    <textarea autoComplete="off" rows={10} className={styles.textarea} name="answer" />
                 </div>
             )}
             render={openModal => (
-                <button onClick={openModal}>
+                <button onClick={handleOpenModal(openModal)}>
                     <LinkIcon />
                 </button>
             )}
@@ -32,5 +32,13 @@ export function ReceiveAnswerModal(props: Props) {
         const peer = props.getPeer(answer.id)
 
         await receiveAnswer(peer, answer)
+    }
+
+    function handleOpenModal(openModal: () => void) {
+        return (e: React.MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault()
+            e.stopPropagation()
+            openModal()
+        }
     }
 }

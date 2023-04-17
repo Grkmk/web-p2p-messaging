@@ -29,7 +29,7 @@ export function ReceiveOfferModal(props: Props) {
                         </div>
                     ) : (
                         <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleReceiveOffer(e)}>
-                            <textarea className={styles.textarea} rows={10} name="offer" />
+                            <textarea className={styles.textarea} autoComplete="off" rows={10} name="offer" />
                             {loading ? (
                                 <p>Processing invite, please wait...</p>
                             ) : (

@@ -7,7 +7,7 @@ import { Connections } from 'components/Connections'
 import { UserContext } from 'App'
 
 export function UserInterfaceView() {
-    const [peers] = useState<Record<string, Peer>>({})
+    const [peers, setPeers] = useState<Record<string, Peer>>({})
     const [selectedPeer, setSelectedPeer] = useState<Peer | null>()
     const [showWelcome, setShowWelcome] = useState<boolean>(true)
     const [, forceUpdate] = useReducer(x => x + 1, 0)
@@ -33,7 +33,7 @@ export function UserInterfaceView() {
                 <AddConnectionsContainer
                     getPeer={id => peers[id]}
                     onChange={forceUpdate}
-                    onCreatePeer={peer => (peers[peer.id] = peer)}
+                    onCreatePeer={peer => setPeers({ ...peers, [peer.id]: peer })}
                 />
             </div>
             <div className={styles.rightPanel}>
@@ -79,5 +79,6 @@ export function UserInterfaceView() {
         peer.conn.close()
 
         delete peers[id]
+        setPeers(peers)
     }
 }

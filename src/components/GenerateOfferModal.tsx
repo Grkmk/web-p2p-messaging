@@ -10,19 +10,45 @@ interface Props {
 
 export function GenerateOfferModal(props: Props) {
     const [offer, setOffer] = useState<Signal | null>()
+    const [providedName, setProvidedName] = useState(false)
 
     return (
         <Modal
-            renderModal={() => (
-                <div>
-                    <p className={styles.offer}>{offer ? JSON.stringify(offer) : 'Generating offer, please wait...'}</p>
-                    <button onClick={handleCopyToClipboard}>Copy offer to clipboard</button>
-                </div>
-            )}
+            renderModal={() => <div>{providedName ? renderOffer() : renderTempNameForm()}</div>}
             onClose={() => setOffer(null)}
             render={openModal => <button onClick={handleOpenModal(openModal)}>Invite</button>}
         />
     )
+
+    function renderOffer() {
+        if (!offer) {
+            return <p>Generating offer, please wait...</p>
+        }
+
+        return (
+            <>
+                <p className={styles.offer}>{JSON.stringify(offer)}</p>
+                <button onClick={handleCopyToClipboard}>Copy offer to clipboard</button>
+            </>
+        )
+    }
+
+    function renderTempNameForm() {
+        return (
+            <form onSubmit={e => handleSubmit(e)}>
+                <div>
+                    <p>
+                        Provide a temporary name for the peer. Once the connection is established, the name will
+                        automatically be set to the peer's actual name.
+                    </p>
+                </div>
+                <input autoComplete="off" name="tempName" type="text" />
+                <div>
+                    <button type="submit">Generate invite offer</button>
+                </div>
+            </form>
+        )
+    }
 
     async function handleCopyToClipboard() {
         if (!offer) {
@@ -33,12 +59,25 @@ export function GenerateOfferModal(props: Props) {
     }
 
     function handleOpenModal(openModal: () => void) {
-        return async (e: React.MouseEvent<HTMLButtonElement>) => {
+        return (e: React.MouseEvent<HTMLButtonElement>) => {
             e.preventDefault()
+            e.stopPropagation()
             openModal()
-
-            const peer = await createPeerToOffer(setOffer, props.onChange)
-            props.onCreatePeer(peer)
         }
+    }
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const tempName = e.currentTarget.tempName.value
+        if (!tempName) {
+            alert('Please provide a valid temporary name')
+            return
+        }
+
+        setProvidedName(true)
+        const peer = await createPeerToOffer(setOffer, props.onChange, tempName)
+        props.onCreatePeer(peer)
     }
 }
