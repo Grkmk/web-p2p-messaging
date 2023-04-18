@@ -32,7 +32,7 @@
 
 .content {
     padding: 16px;
-    width: 100%;
+    width: calc(100% - 32px); // to account for padding
     height: 100%;
     margin-bottom: 24px;
     margin-top: 8px;

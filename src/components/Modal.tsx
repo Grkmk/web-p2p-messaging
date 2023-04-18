@@ -27,14 +27,16 @@ export function Modal(props: Props) {
                                         X
                                     </button>
                                 )}
-                                <form onSubmit={e => handleSubmit(e)}>
-                                    <div className={styles.content}>{props.renderModal()}</div>
-                                    {props.handleSubmit && (
+                                {props.handleSubmit ? (
+                                    <form onSubmit={e => handleSubmit(e)}>
+                                        <div className={styles.content}>{props.renderModal()}</div>
                                         <div className={styles.submitButton}>
                                             <button type="submit">Submit</button>
                                         </div>
-                                    )}
-                                </form>
+                                    </form>
+                                ) : (
+                                    <div className={styles.content}>{props.renderModal()}</div>
+                                )}
                             </div>
                         </div>
                     </div>,

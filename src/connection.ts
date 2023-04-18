@@ -27,11 +27,11 @@ interface Message {
 
 const ICE_SERVERS: RTCIceServer[] = [{ urls: 'stun:stun1.l.google.com:19302' }]
 
-export async function createPeerToOffer(onSuccess: (offer: Signal) => void, onChange: () => void) {
+export async function createPeerToOffer(onSuccess: (offer: Signal) => void, onChange: () => void, tempName: string) {
     // Create the local connection and its event listeners
     const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
 
-    const peer: Peer = { id: uuidV4(), username: 'not yet set', conn }
+    const peer: Peer = { id: uuidV4(), username: tempName, conn }
 
     // Create the data channel and establish its event listeners
     peer.chan = conn.createDataChannel('chan' + peer.id)
