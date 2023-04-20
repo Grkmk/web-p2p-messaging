@@ -6,6 +6,11 @@ import { AddConnectionsContainer } from 'components/AddConnectionsContainer'
 import { Connections } from 'components/Connections'
 import { UserContext } from 'App'
 
+/**
+ * The main user interface component of the app.
+ * Displays the connections panel and message panel, and handles creation and deletion of peers.
+ * @returns {JSX.Element} a React component that renders the user interface.
+ */
 export function UserInterfaceView() {
     const [peers, setPeers] = useState<Record<string, Peer>>({})
     const [selectedPeer, setSelectedPeer] = useState<Peer | null>()

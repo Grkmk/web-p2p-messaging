@@ -8,6 +8,13 @@ interface Props {
     onCreatePeer: (peer: Peer) => void
 }
 
+/**
+ * A modal component that allows the user to generate and copy a WebRTC offer for inviting peers to join the conversation.
+ * @param {Object} props - The props object that contains the following properties:
+ *   - onChange {function}     - A callback function to be invoked when the state of a peer changes.
+ *   - onCreatePeer {function} - A callback function to be invoked when a new peer is created.
+ * @returns {JSX.Element} A React element representing the modal component.
+ */
 export function GenerateOfferModal(props: Props) {
     const [offer, setOffer] = useState<Signal | null>()
     const [providedName, setProvidedName] = useState(false)

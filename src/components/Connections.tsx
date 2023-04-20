@@ -12,6 +12,16 @@ interface Props {
     onRemovePeer: (id: string) => void
 }
 
+/**
+ * A container component that displays a list of active and inactive peers, and allows the user to remove or select a peer.
+ * @param {Object} props       - The props object that contains the following properties:
+ *   - peers {Array}           - An array of peer objects to be displayed.
+ *   - onSelectPeer {function} - A callback function to be invoked when a peer is selected.
+ *   - getPeer {function}      - A callback function to retrieve a peer object by ID.
+ *   - onRemovePeer {function} - A callback function to be invoked when a peer is removed.
+ *   - selectedPeerId {string} - The ID of the currently selected peer.
+ * @returns {JSX.Element} A React element representing the container component.
+ */
 export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer, selectedPeerId }: Props) {
     const activePeers = peers.filter(peer => peer.enabled)
     const inactivePeers = peers.filter(peer => !peer.enabled)

@@ -1,5 +1,9 @@
 import React from 'react'
 
+/**
+ A functional component that renders instructions on how to use the web app.
+ @returns {JSX.Element} A React element representing the instructions component.
+ */
 export function Instructions() {
     return (
         <div>

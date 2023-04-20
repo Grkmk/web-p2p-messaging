@@ -9,6 +9,13 @@ interface Props {
     getPeer: (peerId: string) => Peer
 }
 
+/**
+ * A container component for adding connections that renders a GenerateOfferModal and ReceiveOfferModal.
+ * @param {Object} props - The props object that contains the following properties:
+ *   - onChange {function}     - A callback function to be invoked when the state of a peer changes.
+ *   - onCreatePeer {function} - A callback function to be invoked when a new peer is created.
+ * @returns {JSX.Element} A React element representing the container component.
+ */
 export function AddConnectionsContainer(props: Props) {
     return (
         <div className={styles.container}>
