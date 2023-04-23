@@ -8,7 +8,7 @@ import { UserContext } from 'App'
 
 /**
  * The main user interface component of the app.
- * Displays the connections panel and message panel, and handles creation and deletion of peers.
+ * Displays the info section, connections and message panels. The component also stores the peers, the selected peer, and whether to show the welcome message or not.
  * @returns {JSX.Element} a React component that renders the user interface.
  */
 export function UserInterfaceView() {
