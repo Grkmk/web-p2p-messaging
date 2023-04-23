@@ -157,7 +157,7 @@ function handleChannelStatusChange(peer: Peer, onChange: () => void) {
         console.log('Received channel status change: ' + JSON.stringify(event))
 
         if (event.isTrusted) {
-            peer.enabled = true
+            peer.enabled = peer.conn.connectionState === 'connected'
             onChange()
             return
         }
