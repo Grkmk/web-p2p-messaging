@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { USERNAME_SESSION_KEY } from 'App'
 import { v4 as uuidV4 } from 'uuid'
 
 export interface Peer {
@@ -114,6 +115,43 @@ export function sendMessage(peer: Peer, data: string, onSuccess: () => void) {
     }
 }
 
+/**
+ * A function that validates the user signal input for the WebRTC connection
+ * @param signal
+ * @returns {boolean}
+ */
+export function isOfSignalInterface(signal: unknown) {
+    if (typeof signal !== 'object' || signal === null) {
+        return false
+    }
+
+    if (!('id' in signal) || !('username' in signal) || !('description' in signal)) {
+        return false
+    }
+
+    if (
+        typeof signal.id !== 'string' ||
+        typeof signal.username !== 'string' ||
+        typeof signal.description !== 'object'
+    ) {
+        return false
+    }
+
+    if (!signal.id || !signal.username || !signal.description) {
+        return false
+    }
+
+    if (!('type' in signal.description) || !('sdp' in signal.description)) {
+        return false
+    }
+
+    if (typeof signal.description.type !== 'string' || typeof signal.description.sdp !== 'string') {
+        return false
+    }
+
+    return true
+}
+
 function handleChannelStatusChange(peer: Peer, onChange: () => void) {
     return (event: Event) => {
         console.log('Received channel status change: ' + JSON.stringify(event))
@@ -150,7 +188,7 @@ function handleIceCandidateForOffer(peer: Peer, onSuccess: (signal: Signal) => v
         if (event.isTrusted) {
             onSuccess({
                 id: peer.id,
-                username: sessionStorage.getItem('username') || 'Invalid Name',
+                username: sessionStorage.getItem(USERNAME_SESSION_KEY) || 'Invalid Name',
                 description: peer.conn.localDescription as RTCSessionDescriptionInit,
             })
         }
@@ -168,7 +206,7 @@ function handleIceCandidateForAnswer(peer: Peer, onSuccess: (signal: Signal) => 
         if (event.isTrusted) {
             onSuccess({
                 id: peer.id,
-                username: sessionStorage.getItem('username') || 'Invalid Name',
+                username: sessionStorage.getItem(USERNAME_SESSION_KEY) || 'Invalid Name',
                 description: peer.conn.localDescription as RTCSessionDescriptionInit,
             })
         }

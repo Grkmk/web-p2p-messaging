@@ -99,5 +99,6 @@ export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome 
 
         const message: string = e.currentTarget.message.value
         sendMessage(peer, message, onSendMessage)
+        formRef.current?.reset()
     }
 }

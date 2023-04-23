@@ -4,7 +4,7 @@ import React from 'react'
 
 interface Props {
     onClose?: () => void
-    handleSubmit?: (e: React.FormEvent<HTMLFormElement>) => void
+    handleSubmit?: (e: React.FormEvent<HTMLFormElement>, closeModal: () => void) => void
     render?: (openModal: () => void) => JSX.Element
     renderModal: () => React.ReactNode
     startOpen?: boolean
@@ -30,7 +30,7 @@ export function Modal(props: Props) {
             {props.render && props.render(() => setOpen(true))}
             {open &&
                 createPortal(
-                    <div className={styles.container}>
+                    <div className={styles.container} onClick={e => e.stopPropagation()}>
                         <div className={styles.modal}>
                             <div className={styles.modalContent}>
                                 {!props.hideCloseButton && (
@@ -64,7 +64,6 @@ export function Modal(props: Props) {
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        props.handleSubmit?.(e)
-        setOpen(false)
+        props.handleSubmit?.(e, () => setOpen(false))
     }
 }
