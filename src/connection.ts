@@ -27,6 +27,13 @@ interface Message {
 
 const ICE_SERVERS: RTCIceServer[] = [{ urls: 'stun:stun1.l.google.com:19302' }]
 
+/**
+ Creates a new Peer and generates an offer to connect to another Peer.
+ @param onSuccess Callback function to execute on successful offer creation.
+ @param onChange Callback function to execute on channel status changes.
+ @param tempName Name to be used as the Peer's username until updated by the answer signal.
+ @returns The newly created Peer instance.
+ */
 export async function createPeerToOffer(onSuccess: (offer: Signal) => void, onChange: () => void, tempName: string) {
     // Create the local connection and its event listeners
     const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
@@ -50,6 +57,13 @@ export async function createPeerToOffer(onSuccess: (offer: Signal) => void, onCh
     return peer
 }
 
+/**
+ Creates a new Peer and responds to an offer to connect from another Peer.
+ @param offer The offer signal received from the other Peer.
+ @param onSuccess Callback function to execute on successful answer creation.
+ @param onChange Callback function to execute on channel status changes.
+ @returns The newly created Peer instance.
+ */
 export async function createPeerFromOffer(offer: Signal, onSuccess: (answer: Signal) => void, onChange: () => void) {
     // Create the remote connection and its event listeners
     const conn = new RTCPeerConnection({ iceServers: ICE_SERVERS })
@@ -69,11 +83,22 @@ export async function createPeerFromOffer(offer: Signal, onSuccess: (answer: Sig
     return peer
 }
 
+/**
+ Handles receiving an answer signal from another Peer and sets the remote description for the connection.
+ @param peer The Peer instance to receive the answer.
+ @param answer The answer signal received from the other Peer.
+ */
 export async function receiveAnswer(peer: Peer, answer: Signal) {
     peer.username = answer.username
     await peer.conn.setRemoteDescription(answer.description)
 }
 
+/**
+ Sends a message over a Peer's RTCDataChannel.
+ @param peer The Peer instance to send the message.
+ @param data The message to send.
+ @param onSuccess Callback function to execute on successful message sending.
+ */
 export function sendMessage(peer: Peer, data: string, onSuccess: () => void) {
     const message: Message = {
         data,

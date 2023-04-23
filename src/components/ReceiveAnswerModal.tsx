@@ -7,6 +7,12 @@ interface Props {
     getPeer: (peerId: string) => Peer
 }
 
+/**
+ * A React functional component that allows user to input and submit the received signaling answer from a peer.
+ * @param {Object} props - The props object that contains the following properties:
+ *   - getPeer {function} - A callback function to retrieve a peer object by ID.
+ * @returns {JSX.Element} A React element representing the ReceiveAnswerModal component.
+ */
 export function ReceiveAnswerModal(props: Props) {
     return (
         <Modal

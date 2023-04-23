@@ -8,6 +8,13 @@ interface Props {
     onChange: () => void
 }
 
+/**
+ * A React functional component that allows user to input and submit the received offer from a peer to begin the signaling process.
+ * @param {Object} props - The props object that contains the following properties:
+ *   - onCreatePeer {function} - A callback function to create a new peer connection.
+ *   - onChange {function}     - A callback function to be invoked when a peer's status changes.
+ * @returns {JSX.Element} A React element representing the container component.
+ */
 export function ReceiveOfferModal(props: Props) {
     const [answer, setAnswer] = useState<Signal | null>()
     const [loading, setLoading] = useState<boolean>(false)

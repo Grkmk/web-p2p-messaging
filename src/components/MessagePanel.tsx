@@ -10,6 +10,14 @@ interface Props {
     showInstructionsWithWelcome: boolean
 }
 
+/**
+ * A functional component that renders the messaging interface for a given peer, including a form for sending messages and a container for displaying the message history.
+ * @param {Object} props - The props object that contains the following properties:
+ *   - peer {Object}                         - The peer object representing the connection.
+ *   - onSendMessage {function}              - A callback function to be invoked when the user sends a message.
+ *   - showInstructionsWithWelcome {boolean} - A flag indicating whether to show the welcome message and instructions.
+ * @returns {JSX.Element} A React element representing the messaging interface component.
+ */
 export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome }: Props) {
     const disabled = !peer || !peer.enabled
     const formRef = React.useRef<HTMLFormElement>(null)

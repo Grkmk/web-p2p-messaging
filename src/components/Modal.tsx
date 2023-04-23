@@ -11,6 +11,17 @@ interface Props {
     hideCloseButton?: boolean
 }
 
+/**
+ * The Modal component renders a standardized modal dialog box with the specified content and optionally provides a way to submit the form data.
+ * @param {Object} props - The props object that contains the following properties:
+ *   - startOpen {boolean}       - A boolean that determines whether the modal is open or closed when the component is first rendered.
+ *   - render {function}         - A function that returns a React element that triggers the opening of the modal.
+ *   - hideCloseButton {boolean} - A boolean that determines whether to display the close button in the modal.
+ *   - handleSubmit {function}   - A function that is called when the form is submitted.
+ *   - renderModal {function}    - A function that returns the content to be displayed in the modal.
+ *   - onClose {function}        - A function that is called when the modal is closed.
+ * @returns {JSX.Element} A React element representing the Modal component.
+ */
 export function Modal(props: Props) {
     const [open, setOpen] = React.useState(props.startOpen)
 
