@@ -5,7 +5,7 @@ interface Props {
 }
 
 /**
- * A container component that prompts the user to enter a username upon initial load of the application.
+ * A container component that prompts the user to enter a username.
  * @param {Object} props - The props object that contains the following properties:
  *   - onSetUsername {function} - A callback function to be invoked when the user submits their username.
  * @returns {JSX.Element} A React element representing the container component.
