@@ -12,7 +12,7 @@ interface Props {
 }
 
 /**
- * The Modal component renders a modal dialog box with the specified content and provides a way to submit the form data.
+ * The Modal component renders a standardized modal dialog box with the specified content and optionally provides a way to submit the form data.
  * @param {Object} props - The props object that contains the following properties:
  *   - startOpen {boolean}       - A boolean that determines whether the modal is open or closed when the component is first rendered.
  *   - render {function}         - A function that returns a React element that triggers the opening of the modal.
