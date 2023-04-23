@@ -9,7 +9,7 @@ interface Props {
 }
 
 /**
- * A container component that allows the user to receive a WebRTC offer from a peer and create a new peer connection.
+ * A React functional component that allows user to input and submit the received offer from a peer to begin the signaling process.
  * @param {Object} props - The props object that contains the following properties:
  *   - onCreatePeer {function} - A callback function to create a new peer connection.
  *   - onChange {function}     - A callback function to be invoked when a peer's status changes.
