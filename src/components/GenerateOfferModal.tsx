@@ -9,7 +9,7 @@ interface Props {
 }
 
 /**
- * A modal component that allows the user to generate and copy a WebRTC offer for inviting peers to join the conversation.
+ * A modal component that allows the user to generate and copy a WebRTC offer for inviting a peer. The invited peer will be stored with the user provided alias.
  * @param {Object} props - The props object that contains the following properties:
  *   - onChange {function}     - A callback function to be invoked when the state of a peer changes.
  *   - onCreatePeer {function} - A callback function to be invoked when a new peer is created.
