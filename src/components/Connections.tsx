@@ -3,6 +3,7 @@ import { Peer } from 'connection'
 import classnames from 'classnames'
 import { ReceiveAnswerModal } from './ReceiveAnswerModal'
 import { TrashIcon } from './icons/TrashIcon'
+import { useEffect, useReducer } from 'react'
 
 interface Props {
     peers: Peer[]
@@ -23,8 +24,17 @@ interface Props {
  * @returns {JSX.Element} A React element representing the container component.
  */
 export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer, selectedPeerId }: Props) {
-    const activePeers = peers.filter(peer => peer.enabled)
-    const inactivePeers = peers.filter(peer => !peer.enabled)
+    const activePeers = peers.filter(peer => peer.conn.connectionState === 'connected')
+    const inactivePeers = peers.filter(peer => peer.conn.connectionState !== 'connected')
+    const [, forceUpdate] = useReducer(x => x + 1, 0)
+
+    // rerender every 5 seconds
+    useEffect(() => {
+        const interval = setInterval(() => {
+            forceUpdate()
+        }, 5000)
+        return () => clearInterval(interval)
+    }, [])
 
     return (
         <div className={styles.container}>

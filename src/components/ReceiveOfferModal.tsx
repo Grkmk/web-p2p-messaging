@@ -31,8 +31,8 @@ export function ReceiveOfferModal(props: Props) {
                     {answer ? (
                         <div>
                             <p>Please copy the below answer and pass it to the peer:</p>
-                            <p>{JSON.stringify(answer)}</p>
-                            <button onClick={handleCopyToClipboard}>Copy offer to clipboard</button>
+                            <p className={styles.answer}>{JSON.stringify(answer)}</p>
+                            <button onClick={handleCopyToClipboard}>Copy answer to clipboard</button>
                         </div>
                     ) : (
                         <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleReceiveOffer(e)}>
