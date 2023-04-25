@@ -4,7 +4,7 @@ import { WelcomingModal } from './components/WelcomingModal'
 import React, { useReducer } from 'react'
 
 export const UserContext = React.createContext({ username: '' })
-const USERNAME_SESSION_KEY = 'p2p-messaging-username'
+export const USERNAME_SESSION_KEY = 'p2p-messaging-username'
 
 /**
  * The root component of the application.

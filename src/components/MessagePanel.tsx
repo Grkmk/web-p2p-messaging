@@ -19,24 +19,31 @@ interface Props {
  * @returns {JSX.Element} A React element representing the messaging interface component.
  */
 export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome }: Props) {
-    const disabled = !peer || !peer.enabled
+    const disabled = !peer || peer.conn.connectionState !== 'connected'
     const formRef = React.useRef<HTMLFormElement>(null)
     const [hasMessage, setHasMessage] = React.useState<boolean>()
 
     return (
         <div className={styles.container}>
             <div className={styles.messageContainer}>{peer ? renderMessages() : renderInstructions()}</div>
-            <form ref={formRef} onSubmit={handleSendMessage} className={styles.form}>
+            <form ref={formRef} onSubmit={handleSubmit} className={styles.form}>
                 <textarea
                     name="message"
                     id="message"
-                    placeholder={disabled ? 'Select a peer to message' : 'Enter message'}
+                    placeholder={getPlaceholder()}
                     draggable={false}
                     maxLength={5000}
                     disabled={disabled}
                     className={styles.textarea}
                     autoComplete="off"
                     onChange={v => setHasMessage(!!v.target.value)}
+                    // if enter is pressed, trigger submit
+                    onKeyDown={e => {
+                        if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                            e.preventDefault()
+                            formRef.current?.requestSubmit()
+                        }
+                    }}
                 />
                 <button type="submit" disabled={disabled || !hasMessage} className={styles.sendButton}>
                     <p>Send</p>
@@ -45,6 +52,18 @@ export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome 
             </form>
         </div>
     )
+
+    function getPlaceholder() {
+        if (!peer) {
+            return 'Select a peer to message'
+        }
+
+        if (peer.conn.connectionState !== 'connected') {
+            return 'Peer is not active'
+        }
+
+        return 'Enter message'
+    }
 
     function renderMessages() {
         return (
@@ -90,7 +109,7 @@ export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome 
         )
     }
 
-    function handleSendMessage(e: React.FormEvent<HTMLFormElement>) {
+    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
         if (!peer) {
@@ -98,6 +117,11 @@ export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome 
         }
 
         const message: string = e.currentTarget.message.value
+        if (!message) {
+            return
+        }
+
         sendMessage(peer, message, onSendMessage)
+        formRef.current?.reset()
     }
 }

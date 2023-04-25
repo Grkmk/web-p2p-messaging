@@ -1,5 +1,5 @@
 import styles from './ReceiveAnswerModal.module.scss'
-import { Peer, Signal, receiveAnswer } from 'connection'
+import { Peer, Signal, receiveAnswer, isOfSignalInterface } from 'connection'
 import { Modal } from './Modal'
 import { LinkIcon } from './icons/LinkIcon'
 
@@ -16,7 +16,7 @@ interface Props {
 export function ReceiveAnswerModal(props: Props) {
     return (
         <Modal
-            handleSubmit={e => handleAnswer(e)}
+            handleSubmit={handleAnswer}
             renderModal={() => (
                 <div>
                     <p>Paste answer in the field below and submit</p>
@@ -31,13 +31,27 @@ export function ReceiveAnswerModal(props: Props) {
         />
     )
 
-    async function handleAnswer(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault()
+    async function handleAnswer(e: React.FormEvent<HTMLFormElement>, closeModal: () => void) {
+        let answer: Signal
+        try {
+            answer = JSON.parse(e.currentTarget.answer.value)
+            if (!isOfSignalInterface(answer)) {
+                throw new Error('Invalid input')
+            }
+        } catch (e) {
+            alert('Please input a valid answer')
+            return
+        }
 
-        const answer: Signal = JSON.parse(e.currentTarget.answer.value)
         const peer = props.getPeer(answer.id)
 
-        await receiveAnswer(peer, answer)
+        try {
+            await receiveAnswer(peer, answer)
+        } catch (e) {
+            alert(`Failed to receive answer for peer ${peer.username}`)
+        }
+
+        closeModal()
     }
 
     function handleOpenModal(openModal: () => void) {

@@ -22,7 +22,10 @@ export function GenerateOfferModal(props: Props) {
     return (
         <Modal
             renderModal={() => <div>{providedName ? renderOffer() : renderTempNameForm()}</div>}
-            onClose={() => setOffer(null)}
+            onClose={() => {
+                setOffer(null)
+                setProvidedName(false)
+            }}
             render={openModal => <button onClick={handleOpenModal(openModal)}>Invite</button>}
         />
     )
@@ -79,7 +82,7 @@ export function GenerateOfferModal(props: Props) {
 
         const tempName = e.currentTarget.tempName.value
         if (!tempName) {
-            alert('Please provide a valid temporary name')
+            alert('Please provide a temporary name')
             return
         }
 

@@ -85,5 +85,7 @@ export function UserInterfaceView() {
 
         delete peers[id]
         setPeers(peers)
+        setSelectedPeer(null)
+        forceUpdate()
     }
 }
