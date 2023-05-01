@@ -14,6 +14,7 @@ interface Props {
  *   - onCreatePeer {function} - A callback function to create a new peer connection.
  *   - onChange {function}     - A callback function to be invoked when a peer's status changes.
  * @returns {JSX.Element} A React element representing the container component.
+ * (Requirements 3.1.10, 3.1.11, 3.1.12)
  */
 export function ReceiveOfferModal(props: Props) {
     const [answer, setAnswer] = useState<Signal | null>()

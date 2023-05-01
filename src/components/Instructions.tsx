@@ -3,6 +3,7 @@ import React from 'react'
 /**
  A functional component that renders instructions on how to use the web app.
  @returns {JSX.Element} A React element representing the instructions component.
+ (Requirement 3.1.3)
  */
 export function Instructions() {
     return (

@@ -30,6 +30,9 @@ export function GenerateOfferModal(props: Props) {
         />
     )
 
+    /**
+     * Requirements (3.1.8, 3.1.9)
+     */
     function renderOffer() {
         if (!offer) {
             return <p>Generating offer, please wait...</p>
@@ -43,6 +46,9 @@ export function GenerateOfferModal(props: Props) {
         )
     }
 
+    /**
+     * (Requirements 3.1.5, 3.1.6)
+     */
     function renderTempNameForm() {
         return (
             <form onSubmit={e => handleSubmit(e)}>

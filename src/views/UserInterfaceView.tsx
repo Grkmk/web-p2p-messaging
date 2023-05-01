@@ -51,6 +51,9 @@ export function UserInterfaceView() {
         </div>
     )
 
+    /**
+     * (Requirement 3.1.2)
+     */
     function renderAppInfo() {
         return (
             <div className={styles.appInfoContainer}>

@@ -22,6 +22,7 @@ interface Props {
  *   - onRemovePeer {function} - A callback function to be invoked when a peer is removed.
  *   - selectedPeerId {string} - The ID of the currently selected peer.
  * @returns {JSX.Element} A React element representing the container component.
+ * (Requirements 3.1.7, 3.1.15, 3.1.19, 3.2.1)
  */
 export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer, selectedPeerId }: Props) {
     const activePeers = peers.filter(peer => peer.conn.connectionState === 'connected')
@@ -53,6 +54,9 @@ export function Connections({ peers, onSelectPeer, getPeer, onRemovePeer, select
         </div>
     )
 
+    /**
+     * (Requirement 3.1.18)
+     */
     function renderInactivePeer(peer: Peer) {
         const className = classnames(styles.inactivePeer, {
             [styles.selected]: selectedPeerId === peer.id,

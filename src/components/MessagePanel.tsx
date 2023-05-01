@@ -17,6 +17,7 @@ interface Props {
  *   - onSendMessage {function}              - A callback function to be invoked when the user sends a message.
  *   - showInstructionsWithWelcome {boolean} - A flag indicating whether to show the welcome message and instructions.
  * @returns {JSX.Element} A React element representing the messaging interface component.
+ * (Requirement 3.1.16, 3.2.2)
  */
 export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome }: Props) {
     const disabled = !peer || peer.conn.connectionState !== 'connected'
@@ -65,6 +66,9 @@ export function MessagePanel({ peer, onSendMessage, showInstructionsWithWelcome 
         return 'Enter message'
     }
 
+    /**
+     * (Requirement 3.1.17)
+     */
     function renderMessages() {
         return (
             <div className={styles.messages}>

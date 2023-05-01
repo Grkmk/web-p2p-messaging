@@ -63,6 +63,7 @@ export async function createPeerToOffer(onSuccess: (offer: Signal) => void, onCh
  @param onSuccess Callback function to execute on successful answer creation.
  @param onChange Callback function to execute on channel status changes.
  @returns The newly created Peer instance.
+ (Requirement 3.3.1)
  */
 export async function createPeerFromOffer(offer: Signal, onSuccess: (answer: Signal) => void, onChange: () => void) {
     // Create the remote connection and its event listeners
@@ -87,6 +88,7 @@ export async function createPeerFromOffer(offer: Signal, onSuccess: (answer: Sig
  Handles receiving an answer signal from another Peer and sets the remote description for the connection.
  @param peer The Peer instance to receive the answer.
  @param answer The answer signal received from the other Peer.
+ (Requirement 3.1.14)
  */
 export async function receiveAnswer(peer: Peer, answer: Signal) {
     peer.username = answer.username
@@ -98,6 +100,7 @@ export async function receiveAnswer(peer: Peer, answer: Signal) {
  @param peer The Peer instance to send the message.
  @param data The message to send.
  @param onSuccess Callback function to execute on successful message sending.
+ (Requirement 3.2.2)
  */
 export function sendMessage(peer: Peer, data: string, onSuccess: () => void) {
     const message: Message = {

@@ -12,6 +12,7 @@ interface Props {
  * @param {Object} props - The props object that contains the following properties:
  *   - getPeer {function} - A callback function to retrieve a peer object by ID.
  * @returns {JSX.Element} A React element representing the ReceiveAnswerModal component.
+ * (Requirement 3.1.13)
  */
 export function ReceiveAnswerModal(props: Props) {
     return (
