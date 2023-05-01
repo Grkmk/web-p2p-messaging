@@ -52,7 +52,7 @@ export function UserInterfaceView() {
     )
 
     /**
-     * (Requirement 3.1.2)
+     * (Requirements 3.1.2, 3.1.4)
      */
     function renderAppInfo() {
         return (
